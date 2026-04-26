@@ -1,0 +1,35 @@
+{
+    "name": "{{npmName}}",
+    "version": "{{npmVersion}}",
+    "description": "NodeJS client for {{npmName}}",
+    "repository": {
+        "type": "git",
+        "url": "https://{{gitHost}}/{{gitUserId}}/{{gitRepoId}}.git"
+    },
+    "main": "dist/api.js",
+    "types": "dist/api.d.ts",
+    "scripts": {
+        "clean": "rm -Rf node_modules/ *.js",
+        "build": "tsc",
+        "test": "npm run build && cucumber-js"
+    },
+    "author": "OpenAPI-Generator Contributors",
+    "license": "{{licenseName}}",
+    "dependencies": {
+        "bluebird": "^3.7.2",
+        "request": "^2.88.2"
+    },
+    "devDependencies": {
+        "@cucumber/cucumber": "^12.8.1",
+        "@types/bluebird": "^3.5.33",
+        "@types/content-type": "^1.1.9",
+        "@types/node": "^25.6.0",
+        "@types/request": "^2.48.8",
+        "content-type": "^1.0.5",
+        "ts-node": "^10.9.2",
+        "typescript": "^6.0.3"
+    }{{#npmRepository}},
+    "publishConfig": {
+        "registry": "{{npmRepository}}"
+    }{{/npmRepository}}
+}

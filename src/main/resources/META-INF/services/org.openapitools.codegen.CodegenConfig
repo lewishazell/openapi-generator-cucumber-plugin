@@ -1,0 +1,5 @@
+dev.hazell.openapi.cucumber.codegen.PythonCucumberGenerator
+dev.hazell.openapi.cucumber.codegen.CSharpCucumberGenerator
+dev.hazell.openapi.cucumber.codegen.JavaCucumberGenerator
+dev.hazell.openapi.cucumber.codegen.GoCucumberGenerator
+dev.hazell.openapi.cucumber.codegen.TypeScriptNodeCucumberGenerator

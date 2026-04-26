@@ -1,0 +1,244 @@
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+export * from '../../api/{{ classFilename }}';
+import { {{ classname }}{{#hasApiKeyMethods}}, {{classname}}ApiKeys{{/hasApiKeyMethods}} } from '../../api/{{ classFilename }}';
+{{/operations}}
+{{#withInterfaces}}
+export * from './{{ classFilename }}Interface'
+{{/withInterfaces}}
+{{/apis}}
+{{/apiInfo}}
+import * as http from 'http';
+import * as assert from 'assert';
+import { Before, Given, When, Then, DataTable } from '@cucumber/cucumber';
+import * as contentType from 'content-type';
+
+class TestContext {
+    public request: Request | undefined;
+    public response: { message: http.IncomingMessage, body: any } | undefined;
+    public targetHost: string | undefined;
+    public accessToken: string | undefined;
+    public securityScheme: string | undefined;
+    public apiKey: string | undefined;
+    public apiKeyPrefix: string | undefined;
+}
+
+const ctx = new TestContext();
+
+Before(function() {
+    const defaultHost: string = "{{cucumberTargetHost}}";
+
+    ctx.targetHost = process.env.cucumber_target_host;
+    ctx.accessToken = process.env.cucumber_access_token?.trim();
+    ctx.securityScheme = process.env.cucumber_security_scheme?.trim();
+    ctx.apiKey = process.env.cucumber_api_key?.trim();
+    ctx.apiKeyPrefix = process.env.cucumber_api_key_prefix?.trim();
+
+    if (!ctx.targetHost) {
+        ctx.targetHost = defaultHost;
+    }
+
+    if (!ctx.targetHost) {
+        throw new Error("Missing required configuration: 'cucumber_target_host'. Please set the cucumber_target_host environment variable, or pass it during generation with -p cucumberTargetHost=http://your-api");
+    }
+
+    {{^hasHttpBearerMethods}}
+    if (ctx.accessToken) {
+        throw new Error("An access token has been set but the OpenAPI specification has no HTTP bearer authentication methods");
+    }
+    {{/hasHttpBearerMethods}}
+
+    {{^hasApiKeyMethods}}
+    if (ctx.apiKey) {
+        throw new Error("An API key has been set but the OpenAPI specification has no API key authentication methods");
+    }
+    {{/hasApiKeyMethods}}
+});
+
+Given('there is a {string} request for the {string}', function(operationId: string, classname: string) {
+    ctx.request = new Request(classname, operationId);
+});
+
+Given('there is an {string} request for the {string}', function(operationId: string, classname: string) {
+    ctx.request = new Request(classname, operationId);
+});
+
+Given('the {string} parameter has a value of {string}', function(parameter: string, value: string) {
+    {{#apiInfo.apis}}
+    if (ctx.request?.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}") {
+        {{#operations}}
+        {{#operation}}
+        if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
+            {{#allParams}}
+            if (parameter == "{{paramName}}") {
+                {{^isContainer}}
+                ctx.request.parameters["{{paramName}}"] = value;
+                return;
+                {{/isContainer}}
+                {{#isContainer}}
+                throw new Error("Cannot set collection parameter {{paramName}} from String value");
+                {{/isContainer}}
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/allParams}}
+        }
+        {{^-last}}
+
+        {{/-last}}
+        {{/operation}}
+        {{/operations}}
+    }
+    
+    {{/apiInfo.apis}}
+    throw new Error(`${ctx.request?.classname}.${ctx.request?.operationId} does not have a parameter called ${parameter}`);
+});
+
+Given('the {string} parameter has a JSON value of:', function(parameter: string, value: string)  {
+    {{#apiInfo.apis}}
+    if (ctx.request?.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}") {
+        {{#operations}}
+        {{#operation}}
+        if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
+            {{#allParams}}
+            if (parameter == "{{paramName}}") {
+                ctx.request.parameters["{{paramName}}"] = JSON.parse(value);
+                return;
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/allParams}}
+        }
+        {{^-last}}
+
+        {{/-last}}
+        {{/operation}}
+        {{/operations}}
+    }
+
+    {{/apiInfo.apis}}
+    throw new Error(`${ctx.request?.classname}.${ctx.request?.operationId} does not have a parameter called ${parameter}`);
+});
+
+Given('the {string} parameter has the following values:', function(parameter: string, table: DataTable) { 
+    {{#apiInfo.apis}}
+    if (ctx.request?.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}") {
+        {{#operations}}
+        {{#operation}}
+        if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
+            {{#allParams}}
+            if (parameter == "{{paramName}}") {
+                {{#isContainer}}
+                const collection: any[] = [];
+                for (const row of table.hashes()) {
+                    const value: any = row["value"];
+                    collection.push(value);
+                }
+
+                ctx.request.parameters["{{paramName}}"] = collection;
+                return;
+                {{/isContainer}}
+                {{^isContainer}}
+                throw new Error("Cannot read a DataTable into non-collection parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}");
+                {{/isContainer}}
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/allParams}}
+        }
+        {{^-last}}
+
+        {{/-last}}
+        {{/operation}}
+        {{/operations}}
+    }
+
+    {{/apiInfo.apis}}
+    throw new Error(`${ctx.request?.classname}.${ctx.request?.operationId} does not have a parameter called ${parameter}`);
+});
+
+When('the request is sent', async function() {
+    {{#apiInfo.apis}}
+    if (ctx.request?.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}") {
+        const api: {{classname}} = new {{classname}}(ctx.targetHost);
+        {{#hasHttpBearerMethods}}
+
+        if (ctx.accessToken) {
+            api.accessToken = ctx.accessToken;
+        }
+        {{/hasHttpBearerMethods}}
+        {{#hasApiKeyMethods}}
+
+        if (ctx.apiKey)
+        {
+            if (!ctx.securityScheme) {
+                throw new Error("Missing required configuration: 'cucumber_security_scheme'. When using an API key, please also set the cucumber_security_scheme environment variable");
+            }
+
+            if (ctx.apiKeyPrefix) {
+                ctx.apiKey = `${ctx.apiKeyPrefix} ${ctx.apiKey}`;
+            }
+
+            api.setApiKey({{classname}}ApiKeys[ctx.securityScheme], ctx.apiKey);
+        }
+        {{/hasApiKeyMethods}}
+        {{#operations}}
+        {{#operation}}
+
+        if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
+            let { response, body } = await api.{{operationId}}({{#allParams}}ctx.request.parameters["{{paramName}}"]{{^-last}}, {{/-last}}{{/allParams}});
+            ctx.response = { message: response, body };
+
+            return;
+        }
+        {{/operation}}
+        {{/operations}}
+    }
+    {{/apiInfo.apis}}
+
+    throw new Error(`${ctx.request?.classname}.${ctx.request?.operationId} does not exist`);
+});
+
+Then('the response status should be {int}', function(statusCode: string) {
+    assert.strictEqual(ctx.response?.message.statusCode, parseInt(statusCode), `Expected response status to be ${statusCode} but got ${ctx.response?.message.statusCode}`);
+});
+
+Then('the response content should be:', function(content: string) {
+    const { type } = contentType.parse(ctx.response?.message.headers["content-type"]!);
+
+    if (type == "application/json") {
+        const actual: any = JSON.parse(JSON.stringify(ctx.response?.body));
+        const expected: any = JSON.parse(content);
+
+        assert.deepStrictEqual(actual, expected, `Exepcted response data to be '${content}' but got '${JSON.stringify(actual)}'`);
+    } else {
+        throw new Error("Cannot assert against unsupported content type: " + type);
+    }
+});
+
+class Request {
+    private _classname: string;
+    private _operationId: string;
+    private _parameters: { [name: string]: any } = {};
+
+    public constructor(classname: string, operationId: string) {
+        this._classname = classname;
+        this._operationId = operationId;
+    }
+
+    public get classname(): string {
+        return this._classname;
+    }
+
+    public get operationId(): string {
+        return this._operationId;
+    }
+
+    public get parameters(): { [name: string]: any } {
+        return this._parameters;
+    }
+}

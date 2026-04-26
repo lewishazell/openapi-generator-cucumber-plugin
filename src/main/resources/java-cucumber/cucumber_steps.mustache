@@ -1,0 +1,309 @@
+{{>licenseInfo}}
+
+package {{invokerPackage}};
+
+import {{apiPackage}}.*;
+import {{modelPackage}}.*;
+import {{invokerPackage}}.auth.*;
+import {{invokerPackage}}.ApiClient;
+import {{invokerPackage}}.ApiException;
+import {{invokerPackage}}.ApiResponse;
+{{#imports}}import {{import}};
+{{/imports}}
+import io.cucumber.junit.platform.engine.Cucumber;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.docstring.DocString;
+
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class StepDefinitions {
+    private static Gson gson = new Gson();
+    private Request request;
+    private ApiResponse<?> response;
+    private ApiClient apiClient = new ApiClient();;
+
+    public StepDefinitions() {
+        String defaultHost = "{{cucumberTargetHost}}";
+        String targetHost = System.getenv("cucumber_target_host");
+        String accessToken = System.getenv("cucumber_access_token");
+        String securityScheme = System.getenv("cucumber_security_scheme");
+        String apiKey = System.getenv("cucumber_api_key");
+        String apiKeyPrefix = System.getenv("cucumber_api_key_prefix");
+
+        if (targetHost == null || targetHost.trim().isEmpty()) {
+            targetHost = defaultHost;
+        }
+
+        if (targetHost == null || targetHost.trim().isEmpty()) {
+            throw new IllegalStateException("Missing required configuration: 'cucumber_target_host'. Please set the cucumber_target_host environment variable, or pass it during generation with -p cucumberTargetHost=http://your-api");
+        }
+
+        apiClient.setBasePath(targetHost);
+
+        if (accessToken != null)
+        {
+            accessToken = accessToken.trim();
+
+            if(!accessToken.isEmpty())
+            {
+                {{#hasHttpBearerMethods}}
+                apiClient.setBearerToken(accessToken);
+                {{/hasHttpBearerMethods}}
+                {{^hasHttpBearerMethods}}
+                throw new UnsupportedOperationException("An access token has been set but the OpenAPI specification has no HTTP bearer authentication methods");
+                {{/hasHttpBearerMethods}}
+            }
+        }
+
+        if (apiKey != null) {
+            apiKey = apiKey.trim();
+
+            if (!apiKey.isEmpty()) {
+                {{#hasApiKeyMethods}}
+                if (securityScheme == null || securityScheme.trim().isEmpty())
+                {
+                    throw new UnsupportedOperationException("Missing required configuration: 'cucumber_security_scheme'. When using an API key, please also set the cucumber_security_scheme environment variable");
+                }
+
+                ApiKeyAuth auth = (ApiKeyAuth)apiClient.getAuthentication(securityScheme);
+
+                auth.setApiKey(apiKey);
+            
+                if (apiKeyPrefix != null && !(apiKeyPrefix = apiKeyPrefix.trim()).isEmpty())
+                {
+                    auth.setApiKeyPrefix(apiKeyPrefix);
+                }
+                {{/hasApiKeyMethods}}
+                {{^hasApiKeyMethods}}
+                throw new UnsupportedOperationException("An API key has been set but the OpenAPI specification has no API key authentication methods");
+                {{/hasApiKeyMethods}}
+            }
+        }
+    }
+
+    @Given("there is a {string} request for the {string}")
+    public void createARequestForApi(String operationId, String classname) {
+        request = new Request(classname, operationId);
+    }
+
+    @Given("there is an {string} request for the {string}")
+    public void createAnRequestForApi(String operationId, String classname) {
+        request = new Request(classname, operationId);
+    }
+
+    @Given("the {string} parameter has a value of {string}")
+    public void giveTheParameterAValueOf(String parameter, String value) {
+        {{#apiInfo.apis}}
+        if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
+            {{#operations}}
+            {{#operation}}
+            if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
+                {{#allParams}}
+                if ("{{paramName}}".equals(parameter)) {
+                    {{^isContainer}}
+                    request.getParameters().put("{{paramName}}", Converter.convertTo({{{dataType}}}.class, value));
+                    return;
+                    {{/isContainer}}
+                    {{#isContainer}}
+                    throw new IllegalArgumentException("Cannot set collection parameter {{paramName}} from String value");
+                    {{/isContainer}}
+                }
+                {{^-last}}
+
+                {{/-last}}
+                {{/allParams}}
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/operation}}
+            {{/operations}}
+        }
+        
+        {{/apiInfo.apis}}
+        throw new IllegalArgumentException(request.getClassname() + "." + request.getOperationId() + " does not have a parameter called " + parameter);
+    }
+
+    @Given("the {string} parameter has a JSON value of:")
+    public void giveTheParameterAJsonValueOf(String parameter, String value) throws Exception {
+        {{#apiInfo.apis}}
+        if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
+            {{#operations}}
+            {{#operation}}
+            if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
+                {{#allParams}}
+                if ("{{paramName}}".equals(parameter)) {
+                    {{^isContainer}}
+                    Object deserialized = gson.fromJson(value, {{dataType}}.class);
+                    {{/isContainer}}
+                    {{#isContainer}}
+                    Type type = TypeToken.getParameterized(List.class, {{baseType}}.class).getType();
+                    Object deserialized = gson.fromJson(value, type);
+                    {{/isContainer}}
+                    request.getParameters().put("{{paramName}}", deserialized);
+                    return;
+                }
+                {{^-last}}
+
+                {{/-last}}
+                {{/allParams}}
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/operation}}
+            {{/operations}}
+        }
+
+        {{/apiInfo.apis}}
+        throw new IllegalArgumentException(request.getClassname() + "." + request.getOperationId() + " does not have a parameter called " + parameter);
+    }
+
+    @Given("the {string} parameter has the following values:")
+    public void giveTheParameterTheFollowingValues(String parameter, DataTable table) {
+        {{#apiInfo.apis}}
+        if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
+            {{#operations}}
+            {{#operation}}
+                if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
+                {{#allParams}}
+                if ("{{paramName}}".equals(parameter)) {
+                    {{#isContainer}}
+                    {{{dataType}}} collection = new ArrayList<{{{baseType}}}>();
+                    for (String value : table.column(0)) {
+                        collection.add(Converter.convertTo({{{baseType}}}.class, value));
+                    }
+
+                    request.getParameters().put("{{paramName}}", collection);
+                    return;
+                    {{/isContainer}}
+                    {{^isContainer}}
+                    throw new UnsupportedOperationException("Cannot read a DataTable into non-collection parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}");
+                    {{/isContainer}}
+                }
+                {{^-last}}
+
+                {{/-last}}
+                {{/allParams}}
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/operation}}
+            {{/operations}}
+        }
+
+        {{/apiInfo.apis}}
+        throw new IllegalArgumentException(request.getClassname() + "." + request.getOperationId() + " does not have a parameter called " + parameter);
+    }
+
+    @When("the request is sent")
+    public void sendTheRequest() throws ApiException {
+        {{#apiInfo.apis}}
+        if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
+            {{classname}} api = new {{classname}}(apiClient);
+
+            {{#operations}}
+            {{#operation}}
+            if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
+                response = api.{{operationId}}WithHttpInfo({{#allParams}}({{{dataType}}})request.getParameters().get("{{paramName}}"){{^-last}}, {{/-last}}{{/allParams}});
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/operation}}
+            {{/operations}}
+        }
+        {{/apiInfo.apis}}
+    }
+
+    @Then("the response status should be {int}")
+    public void thenTheResponseStatusIs(int statusCode) {
+        assertThat(response.getStatusCode()).isEqualTo(statusCode);
+    }
+
+    @Then("the response content should be:")
+    public void theResponseContentShouldBe(DocString content) {
+        String contentType = null;
+
+        if (response.getHeaders().containsKey("Content-Type")) {
+            contentType = response.getHeaders().get("Content-Type").stream()
+                    .findFirst()
+                    .map(String::toLowerCase)
+                    .orElse(null);
+        }
+
+        if (contentType != null && contentType.startsWith("application/json")) {
+            JsonElement actual = JsonParser.parseString(gson.toJson(response.getData()));
+            JsonElement expected = JsonParser.parseString(content.getContent());
+
+            assertThat(actual).isEqualTo(expected);
+        } else {
+            throw new UnsupportedOperationException("Cannot assert against unsupported content type: " + contentType);
+        }
+    }
+
+    private class Request {
+        private String classname;
+        private String operationId;
+        private HashMap<String, Object> parameters = new HashMap<String, Object>();
+
+        public Request(String classname, String operationId) {
+            this.classname = classname;
+            this.operationId = operationId;
+        }
+
+        public String getClassname() {
+            return classname;
+        }
+
+        public String getOperationId() {
+            return operationId;
+        }
+
+        public HashMap<String, Object> getParameters() {
+            return parameters;
+        }
+    }
+
+    private static class Converter {
+        public static <T> T convertTo(Class<T> cls, String s) throws IllegalArgumentException {
+            try {
+                if (cls == String.class) {
+                    return cls.cast(s);
+                } else if (cls == Integer.class) {
+                    return cls.cast(Integer.parseInt(s));
+                } else if (cls == Long.class) {
+                    return cls.cast(Long.parseLong(s));
+                } else if (cls == Float.class) {
+                    return cls.cast(Float.parseFloat(s));
+                } else if (cls == Double.class) {
+                    return cls.cast(Double.parseDouble(s));
+                } else if (cls == Boolean.class) {
+                    return cls.cast(Boolean.parseBoolean(s));
+                } else if (cls == UUID.class) {
+                    return cls.cast(UUID.fromString(s));
+                }
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Cannot convert '" + s + "' to " + cls.getSimpleName(), e);
+            }
+
+            throw new IllegalArgumentException("Cannot convert from String to " + cls.getSimpleName());
+        }
+    }
+}

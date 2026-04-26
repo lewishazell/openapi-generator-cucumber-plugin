@@ -1,0 +1,215 @@
+# coding: utf-8
+
+{{>partial_header}}
+
+import enum
+import json
+import uuid
+import os
+import pytest
+import {{packageName}}
+from typing import TypeVar, List
+from pytest_bdd import scenarios, given, when, then, parsers
+
+{{#apiInfo.apis}}
+from {{apiPackage}}.{{classFilename}} import {{classname}}
+{{/apiInfo.apis}}
+
+T = TypeVar('T')
+
+@pytest.fixture
+def test_context():
+    target_host = os.getenv("cucumber_target_host", "{{cucumberTargetHost}}")
+    access_token = os.getenv("cucumber_access_token")
+    security_scheme = os.getenv("cucumber_security_scheme")
+    api_key = os.getenv("cucumber_api_key")
+    api_key_prefix = os.getenv("cucumber_api_key_prefix")
+
+    target_host = target_host.strip() if target_host is not None else None
+    access_token = access_token.strip() if access_token is not None else None
+    security_scheme = security_scheme.strip() if security_scheme is not None else None
+    api_key = api_key.strip() if api_key is not None else None
+    api_key_prefix = api_key_prefix.strip() if api_key_prefix is not None else None
+
+    if not target_host:
+        raise ValueError("TARGET_HOST is not set or still set to the default placeholder. Please set the cucumber_target_host environment variable or pass -p cucumberTargetHost=... during generation.")
+
+    configuration = {{packageName}}.Configuration(host=target_host)
+
+    if access_token:
+        {{#hasHttpBearerMethods}}
+        configuration.access_token = access_token
+        {{/hasHttpBearerMethods}}
+        {{^hasHttpBearerMethods}}
+        raise ValueError("An access token has been set but the OpenAPI specification has no HTTP bearer authentication methods")
+        {{/hasHttpBearerMethods}}
+
+    if api_key:
+        {{#hasApiKeyMethods}}
+        if not security_scheme:
+            raise ValueError("Missing required configuration: 'cucumber_security_scheme'. When using an API key, please also set the cucumber_security_scheme environment variable")
+
+        configuration.api_key[security_scheme] = api_key
+    
+        if api_key_prefix:
+            configuration.api_key_prefix[security_scheme] = api_key_prefix
+        {{/hasApiKeyMethods}}
+        {{^hasApiKeyMethods}}
+        raise ValueError("An API key has been set but the OpenAPI specification has no API key authentication methods")
+        {{/hasApiKeyMethods}}
+
+    return {
+        "api_client": {{packageName}}.ApiClient(configuration),
+        "request": None,
+        "response": None
+    }
+
+scenarios("features/")
+
+@given(parsers.parse('there is a "{operation_id}" request for the "{classname}"'))
+def create_a_request_for_the_api(test_context, operation_id, classname):
+    test_context["request"] = Request(classname, operation_id)
+
+@given(parsers.parse('there is an "{operation_id}" request for the "{classname}"'))
+def create_an_request_for_the_api(test_context, operation_id, classname):
+    test_context["request"] = Request(classname, operation_id)
+
+@given(parsers.parse('the "{parameter}" parameter has a value of "{value}"'))
+def give_the_parameter_a_value_of(test_context, parameter, value):
+    request = test_context["request"]
+
+    {{#apiInfo.apis}}
+    if request.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}":
+        {{#operations}}
+        {{#operation}}
+        if request.operation_id == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}":
+            {{^hasParams}}
+            pass
+            {{/hasParams}}
+            {{#allParams}}
+            if parameter == "{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}":
+                request.parameters["{{paramName}}"] = convert_to({{{dataType}}}, value)
+                return
+            {{/allParams}}
+        {{/operation}}
+        {{/operations}}
+    {{/apiInfo.apis}}
+
+    raise ValueError(f"{request.classname}.{request.operation_id} does not have a parameter called {parameter}")
+
+@given(parsers.parse('the "{parameter}" parameter has a JSON value of:'))
+def give_the_parameter_a_json_value_of(test_context, parameter, docstring):
+    request = test_context["request"]
+
+    {{#apiInfo.apis}}
+    if request.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}":
+        {{#operations}}
+        {{#operation}}
+        if request.operation_id == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}":
+            {{^hasParams}}
+            pass
+            {{/hasParams}}
+            {{#allParams}}
+            if parameter == "{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}":
+                {{#isModel}}
+                request.parameters[parameter] = {{modelPackage}}.{{{dataType}}}.from_json(docstring)
+                return
+                {{/isModel}}
+                {{^isModel}}
+                raise TypeError("Cannot deserialize a JSON string to {{{dataType}}}")
+                {{/isModel}}
+            {{/allParams}}
+        {{/operation}}
+        {{/operations}}
+    {{/apiInfo.apis}}
+
+    raise ValueError(f"{request.classname}.{request.operation_id} does not have a parameter called {parameter}")
+
+@given(parsers.parse('the "{parameter}" parameter has the following values:'))
+def give_the_parameter_the_following_values(test_context, parameter, datatable):
+    request = test_context["request"]
+    
+    {{#apiInfo.apis}}
+    if request.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}":
+        {{#operations}}
+        {{#operation}}
+        if request.operation_id == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}":
+            {{^hasParams}}
+            pass
+            {{/hasParams}}
+            {{#allParams}}
+            if parameter == "{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}":
+                {{#isContainer}}
+                collection = list[{{{baseType}}}]()
+                for row in datatable:
+                    collection.append(convert_to({{{baseType}}}, row[0]))
+                request.parameters["{{paramName}}"] = collection
+                return
+                {{/isContainer}}
+                {{^isContainer}}
+                raise TypeError("Cannot read a DataTable into parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}} as it is not an array")
+                {{/isContainer}}
+            {{/allParams}}
+        {{/operation}}
+        {{/operations}}
+    {{/apiInfo.apis}}
+
+    raise ValueError(f"{request.classname}.{request.operation_id} does not have a parameter called {parameter}")
+
+@when('the request is sent')
+def send_the_request(test_context):
+    request = test_context["request"]
+    
+    {{#apiInfo.apis}}
+    if request.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}":
+        api = {{classname}}(test_context["api_client"])
+
+        {{#operations}}
+        {{#operation}}
+        if request.operation_id == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}":
+            test_context["response"] = api.{{operationId}}_with_http_info({{#allParams}}request.parameters.get("{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}"){{^-last}}, {{/-last}}{{/allParams}})
+        {{/operation}}
+        {{/operations}}
+    {{/apiInfo.apis}}
+
+@then(parsers.parse('the response status should be {status_code}'))
+def the_response_status_should_be(test_context, status_code):
+    assert test_context["response"].status_code == int(status_code)
+
+@then(parsers.parse("the response content should be:"))
+def the_response_content_should_be(test_context, docstring):
+    content_type = ""
+    if test_context["response"].headers is not None:
+        headers_lower = {k.lower(): v for k, v in test_context["response"].headers.items()}
+        content_type = headers_lower.get("content-type", "").lower()
+
+    if "application/json" in content_type:
+        actual_json = test_context["response"].raw_data.decode('utf-8')
+        actual = json.loads(actual_json)
+        expected = json.loads(docstring)
+
+        assert actual == expected, f"Expected {docstring}, but got {actual_json}"
+    else:
+        raise ValueError(f"Cannot assert against unsupported content type: {content_type}")
+
+class Request:
+    def __init__(self, classname, operation_id):
+        self.classname = classname
+        self.operation_id = operation_id
+        self.parameters = {}
+
+def convert_to(to_type: type[T], value: str) -> any:
+    if to_type == str:
+        return value
+    elif to_type == int:
+        return int(value)
+    elif to_type == float:
+        return float(value)
+    elif to_type == bool:
+        return bool(value)
+    elif to_type == uuid.UUID:
+        return uuid.UUID(value)
+    elif issubclass(to_type, enum.Enum):
+        return to_type[value]
+
+    raise TypeError(f"Cannot convert from str to {to_type.__name__}")
