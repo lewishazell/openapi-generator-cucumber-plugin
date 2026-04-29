@@ -1,0 +1,61 @@
+Failures:
+
+1) Scenario: Successfully find a pet at the pet store with an incorrect response status # features/PetStore.prism.feature
+   ✔ Before # features/step_definitions/steps.js
+   ✔ Given there is a "findPetById" request for the "DefaultApi" # features/step_definitions/steps.js
+   ✔ And the "id" parameter has a value of "1" # features/step_definitions/steps.js
+   ✔ When the request is sent # features/step_definitions/steps.js
+   ✖ Then the response status should be 201 # features/step_definitions/steps.js
+       AssertionError [ERR_ASSERTION]: Expected response status to be 201 but got 200
+
+       200 !== 201
+
+           + expected - actual
+
+           -200
+           +201
+
+           
+   - And the response content should be: # features/step_definitions/steps.js
+       """
+       {"name":"string","tag":"string","id":-9007199254740991}
+       """
+
+2) Scenario: Successfully find a pet at the pet store with an incorrect response content # features/PetStore.prism.feature
+   ✔ Before # features/step_definitions/steps.js
+   ✔ Given there is a "findPetById" request for the "DefaultApi" # features/step_definitions/steps.js
+   ✔ And the "id" parameter has a value of "1" # features/step_definitions/steps.js
+   ✔ When the request is sent # features/step_definitions/steps.js
+   ✔ Then the response status should be 200 # features/step_definitions/steps.js
+   ✖ And the response content should be: # features/step_definitions/steps.js
+       """
+       {"name":"Pickle","tag":"cat","id":1}
+       """
+       AssertionError [ERR_ASSERTION]: Exepcted response data to be '{"name":"Pickle","tag":"cat","id":1}' but got '{"name":"string","tag":"string","id":-9007199254740991}'
+       + actual - expected
+
+         {
+       +   id: -9007199254740991,
+       +   name: 'string',
+       +   tag: 'string'
+       -   id: 1,
+       -   name: 'Pickle',
+       -   tag: 'cat'
+         }
+
+           + expected - actual
+
+            {
+           -  "id": -9007199254740991
+           -  "name": "string"
+           -  "tag": "string"
+           +  "id": 1
+           +  "name": "Pickle"
+           +  "tag": "cat"
+            }
+
+           
+
+7 scenarios (2 failed, 5 passed)
+33 steps (2 failed, 1 skipped, 30 passed)
+ (executing steps: )

@@ -1,0 +1,99 @@
+?   	github.com/GIT_USER_ID/GIT_REPO_ID	[no test files]
+Feature: PetStore API
+  The developer must be able to programmatically manage pets at the pet store
+
+  Scenario: Successfully find a pet at the pet store            # features/PetStore.prism.feature
+    Given there is a "findPetById" request for the "DefaultApi" # godogs_test.go -> *feature
+    And the "id" parameter has a value of "1"                   # godogs_test.go -> *feature
+    When the request is sent                                    # godogs_test.go -> *feature
+    Then the response status should be 200                      # godogs_test.go -> *feature
+    And the response content should be:                         # godogs_test.go -> *feature
+      """
+      {"name":"string","tag":"string","id":-9007199254740991}
+      """
+
+  Scenario: Successfully find a pet at the pet store with an incorrect response status # features/PetStore.prism.feature
+    Given there is a "findPetById" request for the "DefaultApi"                        # godogs_test.go -> *feature
+    And the "id" parameter has a value of "1"                                          # godogs_test.go -> *feature
+    When the request is sent                                                           # godogs_test.go -> *feature
+    Then the response status should be 201                                             # godogs_test.go -> *feature
+    expected statusCode to be 201, but got 200
+    And the response content should be:                                                # godogs_test.go -> *feature
+      """
+      {"name":"string","tag":"string","id":-9007199254740991}
+      """
+
+  Scenario: Successfully find a pet at the pet store with an incorrect response content # features/PetStore.prism.feature
+    Given there is a "findPetById" request for the "DefaultApi"                         # godogs_test.go -> *feature
+    And the "id" parameter has a value of "1"                                           # godogs_test.go -> *feature
+    When the request is sent                                                            # godogs_test.go -> *feature
+    Then the response status should be 200                                              # godogs_test.go -> *feature
+    And the response content should be:                                                 # godogs_test.go -> *feature
+      """
+      {"name":"Pickle","tag":"cat","id":1}
+      """
+    expected JSON response content to be '{"name":"Pickle","tag":"cat","id":1}', but got '{"name":"string","tag":"string","id":-9007199254740991}'
+
+  Scenario: Successfully delete a pet from the pet store      # features/PetStore.prism.feature
+    Given there is a "deletePet" request for the "DefaultApi" # godogs_test.go -> *feature
+    And the "id" parameter has a value of "1"                 # godogs_test.go -> *feature
+    When the request is sent                                  # godogs_test.go -> *feature
+    Then the response status should be 204                    # godogs_test.go -> *feature
+
+  Scenario: Successfully list all pets at the pet store with a matching tag # features/PetStore.prism.feature
+    Given there is a "findPets" request for the "DefaultApi"                # godogs_test.go -> *feature
+    And the "tags" parameter has the following values:                      # godogs_test.go -> *feature
+      | value   |
+      | ------- |
+      | cat     |
+      | dog     |
+    And the "limit" parameter has a value of "2"                            # godogs_test.go -> *feature
+    When the request is sent                                                # godogs_test.go -> *feature
+    Then the response status should be 200                                  # godogs_test.go -> *feature
+    And the response content should be:                                     # godogs_test.go -> *feature
+      """
+      [{"name":"string","tag":"string","id":-9007199254740991}]
+      """
+
+  Scenario: Successfully list all pets at the pet store with a matching tag with no limit # features/PetStore.prism.feature
+    Given there is a "findPets" request for the "DefaultApi"                              # godogs_test.go -> *feature
+    And the "tags" parameter has the following values:                                    # godogs_test.go -> *feature
+      | value   |
+      | ------- |
+      | cat     |
+      | dog     |
+    When the request is sent                                                              # godogs_test.go -> *feature
+    Then the response status should be 200                                                # godogs_test.go -> *feature
+
+  Scenario: Successfully add a pet to the pet store         # features/PetStore.prism.feature
+    Given there is an "addPet" request for the "DefaultApi" # godogs_test.go -> *feature
+    And the "petDetails" parameter has a JSON value of:     # godogs_test.go -> *feature
+      """
+      {"name": "Pickle", "tag": "cat"}
+      """
+    When the request is sent                                # godogs_test.go -> *feature
+    Then the response status should be 200                  # godogs_test.go -> *feature
+
+--- Failed steps:
+
+  Scenario: Successfully find a pet at the pet store with an incorrect response status # features/PetStore.prism.feature
+    Then the response status should be 201 # features/PetStore.prism.feature
+      Error: expected statusCode to be 201, but got 200
+
+  Scenario: Successfully find a pet at the pet store with an incorrect response content # features/PetStore.prism.feature
+    And the response content should be: # features/PetStore.prism.feature
+      Error: expected JSON response content to be '{"name":"Pickle","tag":"cat","id":1}', but got '{"name":"string","tag":"string","id":-9007199254740991}'
+
+
+7 scenarios (5 passed, 2 failed)
+33 steps (30 passed, 2 failed, 1 skipped)
+
+--- FAIL: TestFeatures 
+    --- FAIL: TestFeatures/Successfully_find_a_pet_at_the_pet_store_with_an_incorrect_response_status 
+        suite.go: expected statusCode to be 201, but got 200
+    --- FAIL: TestFeatures/Successfully_find_a_pet_at_the_pet_store_with_an_incorrect_response_content 
+        suite.go: expected JSON response content to be '{"name":"Pickle","tag":"cat","id":1}', but got '{"name":"string","tag":"string","id":-9007199254740991}'
+    godogs_test.go: non-zero status returned, failed to run feature tests
+FAIL
+FAIL	github.com/GIT_USER_ID/GIT_REPO_ID/test	
+FAIL
