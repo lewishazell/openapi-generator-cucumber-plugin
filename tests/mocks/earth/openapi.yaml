@@ -1,0 +1,47 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Earth
+  description: A secured API to a giant supercomputer designed to find the Ultimate Question of Life, the Universe and Everything.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://earth.invalid/
+paths:
+  /the-meaning-of-life:
+    get:
+      description: Returns the meaning of life as computed by the giant supercomputer
+      operationId: getTheMeaningOfLife
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Gets the computed meaning of life response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meaning:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
