@@ -183,7 +183,7 @@ When('the request is sent', async function() {
                 ctx.apiKey = `${ctx.apiKeyPrefix} ${ctx.apiKey}`;
             }
 
-            api.setApiKey({{classname}}ApiKeys[ctx.securityScheme], ctx.apiKey);
+            api.setApiKey({{classname}}ApiKeys[ctx.securityScheme as keyof typeof {{classname}}ApiKeys], ctx.apiKey);
         }
         {{/hasApiKeyMethods}}
         {{#operations}}
