@@ -12,6 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.4.1'
+
       - name: Install npm tools
         run: npm install -g @stoplight/prism-cli@5.14.2 @openapitools/openapi-generator-cli@2.22.0
 
