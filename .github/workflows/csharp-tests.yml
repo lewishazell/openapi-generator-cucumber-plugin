@@ -1,0 +1,31 @@
+name: csharp-tests
+
+on:
+  push:
+    branches:
+      - main
+    pull_request:
+
+jobs:
+  generate-and-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '^1.24.0'
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install npm tools
+        run: npm install -g @stoplight/prism-cli @openapitools/openapi-generator-cli
+
+      - name: Install shUnit2
+        run: sudo apt install shunit2 -y
+
+      - name: Test csharp codegen
+        run: ./test_codegen.sh --filter testCSharpCodegen
+        working-directory: tests
