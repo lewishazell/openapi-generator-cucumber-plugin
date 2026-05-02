@@ -1,0 +1,65 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '24'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.14
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '^1.24.0'
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install npm tools
+        run: npm install -g @stoplight/prism-cli @openapitools/openapi-generator-cli
+
+      - name: Install shUnit2
+        run: sudo apt install shunit2 -y
+
+      - name: Extract version from tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Build JAR
+        run: mvn clean package -Drevision=${VERSION}
+
+      - name: Set JAR path
+        run: echo "JAR_PATH=target/openapi-generator-cucumber-plugin-$VERSION.jar" >> $GITHUB_ENV
+
+      - name: Test release artifact
+        run: ./test_codegen.sh --jar-file "../$JAR_PATH"
+        working-directory: tests
+
+      - name: Upload JAR to release
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+            upload_url: ${{ github.event.release.upload_url }}
+            asset_path: ${{ env.JAR_PATH }}
+            asset_name: openapi-generator-cucumber-plugin-${{ env.VERSION }}.jar
+            asset_content_type: application/java-archive
