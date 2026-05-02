@@ -12,16 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '^1.24.0'
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
       - name: Install npm tools
-        run: npm install -g @stoplight/prism-cli @openapitools/openapi-generator-cli
+        run: npm install -g @stoplight/prism-cli@5.14.2 @openapitools/openapi-generator-cli@2.22.0
 
       - name: Install shUnit2
         run: sudo apt install shunit2 -y
