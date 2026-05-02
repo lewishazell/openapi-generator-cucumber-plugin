@@ -14,7 +14,6 @@ package {{packageName}}
 import (
 	"context"
 	"encoding/json"
-	_ "errors"
 	"fmt"
     "io"
     "mime"
@@ -141,7 +140,7 @@ func (f *feature) giveTheParameterTheFollowingValues(ctx context.Context, param 
                 return ctx, nil
                 {{/isContainer}}
                 {{^isContainer}}
-                return ctx, errors.New("cannot read a Table into parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}} as it is not an array")
+                return ctx, fmt.Errorf("cannot read a Table into parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}} as it is not an array")
                 {{/isContainer}}
             }
             {{^-last}}
@@ -176,7 +175,7 @@ func (f *feature) sendTheRequest(ctx context.Context) (context.Context, error) {
             if val, ok := f.Request.Parameters["{{paramName}}"]; ok {
                 {{paramName}}Param = val
             } else {
-                return ctx, errors.New("parameter \"{{paramName}}\" is required")
+                return ctx, fmt.Errorf("parameter \"{{paramName}}\" is required")
             }
 
             {{/pathParams}}
