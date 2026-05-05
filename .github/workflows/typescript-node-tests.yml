@@ -20,6 +20,12 @@ jobs:
       - name: Install npm tools
         run: npm install -g @stoplight/prism-cli@5.14.2 @openapitools/openapi-generator-cli@2.22.0
 
+      - name: Install jd
+        run: |
+          curl -L https://github.com/josephburnett/jd/releases/download/v2.5.0/jd-amd64-linux -o jd
+          chmod +x jd
+          sudo mv jd /usr/local/bin/
+
       - name: Install shUnit2
         run: sudo apt install shunit2 -y
 
