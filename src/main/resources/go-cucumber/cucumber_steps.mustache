@@ -293,19 +293,24 @@ func safeCast[T any](value interface{}) T {
     return zero
 }
 
-func TestFeatures(t *testing.T) {
-  suite := godog.TestSuite{
-    ScenarioInitializer: InitializeScenario(t),
-    Options: &godog.Options{
-      Format:   "pretty",
-      Paths:    []string{"features"},
-      TestingT: t, // Testing instance that will run subtests.
-    },
-  }
+var opts = godog.Options{}
 
-  if suite.Run() != 0 {
-    t.Fatal("non-zero status returned, failed to run feature tests")
-  }
+func init() {
+  godog.BindFlags("godog.", flag.CommandLine, &opts)
+}
+
+func TestFeatures(t *testing.T) {
+    opts.TestingT = t
+    opts.Paths = []string{"features"}
+
+    suite := godog.TestSuite{
+        ScenarioInitializer: InitializeScenario(t),
+        Options:             &opts,
+    }
+
+    if suite.Run() != 0 {
+        t.Fatal("non-zero status returned, failed to run feature tests")
+    }
 }
 
 func InitializeScenario(t *testing.T) func(*godog.ScenarioContext) {

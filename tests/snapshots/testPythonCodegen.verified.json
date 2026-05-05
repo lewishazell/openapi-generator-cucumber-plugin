@@ -1,0 +1,454 @@
+[
+  {
+    "keyword": "Feature",
+    "uri": "features/PetStore.prism.feature",
+    "name": "PetStore API",
+    "id": "features/petstore.prism.feature",
+    "line": 1,
+    "description": "The developer must be able to programmatically manage pets at the pet store",
+    "language": "en",
+    "tags": [],
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "id": "test_successfully_find_a_pet_at_the_pet_store",
+        "name": "Successfully find a pet at the pet store",
+        "line": 4,
+        "description": "This scenario ensures that the user can successfully retrieve a pet from the store by its ID.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "line": 7,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "line": 8,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 9,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 10,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the response content should be:",
+            "line": 11,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_successfully_find_a_pet_at_the_pet_store_with_an_incorrect_response_status",
+        "name": "Successfully find a pet at the pet store with an incorrect response status",
+        "line": 16,
+        "description": "This scenario ensures that the user can successfully retrieve a pet from the store by its ID, but asserts an incorrect response status.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "line": 19,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "line": 20,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 21,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 201",
+            "line": 22,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "failed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the response content should be:",
+            "line": 23,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "failed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_successfully_find_a_pet_at_the_pet_store_with_an_incorrect_response_content",
+        "name": "Successfully find a pet at the pet store with an incorrect response content",
+        "line": 28,
+        "description": "This scenario ensures that the user can successfully retrieve a pet from the store by its ID, but asserts an incorrect response content.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "line": 31,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "line": 32,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 33,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 34,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the response content should be:",
+            "line": 35,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "failed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_successfully_delete_a_pet_from_the_pet_store",
+        "name": "Successfully delete a pet from the pet store",
+        "line": 40,
+        "description": "This scenario verifies that a pet can be deleted successfully from the pet store using its ID.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"deletePet\" request for the \"DefaultApi\"",
+            "line": 43,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "line": 44,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 45,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 204",
+            "line": 46,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_successfully_list_all_pets_at_the_pet_store_with_a_matching_tag",
+        "name": "Successfully list all pets at the pet store with a matching tag",
+        "line": 48,
+        "description": "This scenario checks that the user can list pets at the pet store that match specified tags.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "line": 51,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"tags\" parameter has the following values:",
+            "line": 52,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"limit\" parameter has a value of \"2\"",
+            "line": 57,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 58,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 59,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the response content should be:",
+            "line": 60,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_successfully_list_all_pets_at_the_pet_store_with_a_matching_tag_with_no_limit",
+        "name": "Successfully list all pets at the pet store with a matching tag with no limit",
+        "line": 65,
+        "description": "This scenario tests the ability to list all pets matching specified tags, but without any limits on the number of results.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "line": 68,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"tags\" parameter has the following values:",
+            "line": 69,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 74,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 75,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_successfully_add_a_pet_to_the_pet_store",
+        "name": "Successfully add a pet to the pet store",
+        "line": 77,
+        "description": "This scenario ensures that a pet can be successfully added to the pet store.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is an \"addPet\" request for the \"DefaultApi\"",
+            "line": 80,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"petDetails\" parameter has a JSON value of:",
+            "line": 81,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 85,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 86,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -49,7 +49,9 @@ testCSharpCodegen() {
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g csharp-cucumber --package-name PetStore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
     cp -r features/ "$testdir/Features"
 
-    (cd "$testdir" && dotnet test) | scrubCSharpTestOutput | verifyText || fail "Received output differed from verified snapshot"
+    (cd out && dotnet test)
+
+    cat $testdir/bin/Debug/*/reqnroll_report.ndjson | cucumber-json-formatter | scrubCucumberReport | verifyJson || fail "Received output differed from verified snapshot"
 }
 
 testGoCodegen() {
@@ -58,7 +60,9 @@ testGoCodegen() {
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g go-cucumber --package-name petstore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
     cp -r features/ out/test/features
     
-    (cd out && go get -u -v all && go test ./...) | scrubGoTestOutput | verifyText || fail "Received report differed from verified snapshot"
+    (cd out && go get -u -v all && go test ./... -godog.format=cucumber:report.json)
+    
+    cat out/cucumber-report.json | scrubCucumberReport | verifyJson || fail "Received output differed from verified snapshot"
 }
 
 testJavaCodegenWithGradle() {
@@ -69,7 +73,9 @@ testJavaCodegenWithGradle() {
     mkdir -p $resourcesdir
     cp -r features/* $resourcesdir
     
-    (cd out && gradle test) | scrubGradleTestOutput | verifyText || fail "Received report differed from verified snapshot"
+    (cd out && gradle test)
+    
+    cat out/build/reports/cucumber-report.json | scrubCucumberReport | verifyJson || fail "Received report differed from verified snapshot"
 }
 
 testJavaCodegenWithMaven() {
@@ -80,7 +86,9 @@ testJavaCodegenWithMaven() {
     mkdir -p $resourcesdir
     cp -r features/* $resourcesdir
     
-    (cd out && mvn test) | scrubMavenTestOutput | verifyText || fail "Received report differed from verified snapshot"
+    (cd out && mvn test)
+    
+    cat out/target/cucumber-report.json | scrubCucumberReport | verifyJson || fail "Received report differed from verified snapshot"
 }
 
 testPythonCodegen() {
@@ -89,7 +97,9 @@ testPythonCodegen() {
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g python-cucumber --package-name petstore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
     cp -r features/ out/test
 
-    (cd out && pip install -r requirements.txt -r test-requirements.txt > /dev/null && pytest) | scrubPythonTestOutput | verifyText || fail "Received report differed from verified snapshot"
+    (cd out && pip install -r requirements.txt -r test-requirements.txt && pytest --cucumber-json cucumber-report.json)
+    
+    cat out/cucumber-report.json | scrubCucumberReport | verifyJson || fail "Received report differed from verified snapshot"
 }
 
 testTypeScriptNodeCodegen() {
@@ -98,11 +108,13 @@ testTypeScriptNodeCodegen() {
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010 -p npmName=petstore
     cp features/*.feature out/features
 
-    (cd out && npm install > /dev/null && npm test) | scrubTypeScriptNodeTestOutput | verifyText || fail "Received report differed from verified snapshot"
+    (cd out && npm install && npx cucumber-js --format progress --format json:cucumber-report.json)
+    
+    cat out/cucumber-report.json | scrubCucumberReport | verifyJson || fail "Received report differed from verified snapshot"
 }
 
 tearDown() {
-    rm -r out
+    echo "rm -r out"
 }
 
 oneTimeTearDown() {
@@ -120,36 +132,15 @@ filter() {
   return 0
 }
 
-scrubCSharpTestOutput() {
-    cat | sed -n '/A total of 1 test files matched the specified pattern\./,$p' | sed -E 's/in .*\.cs://; s/\[[0-9]+ ms\]//g; s/Duration: [0-9]+ ms//g; s/\([0-9].[0-9]s\)//g; s/\(net[0-9]+\.[0.9]+\)//'
+scrubCucumberReport() {
+    jq --indent 2 'map(.elements |= map(del(.start_timestamp?) | .steps |= map(del(.result.duration?, .result.error_message?))))'
 }
 
-scrubGoTestOutput() {
-    cat | sed -r 's/\x1B\[[0-9;]*[mK]//g' | sed -E 's/\(?[0-9]+.[0-9]+s\)?//g; s/[0-9]+\.[0-9]+ms//g; s/\.feature:[0-9]+/.feature/g; s/\.go:[0-9]+/.go/g'
-}
+verifyJson() {
+    local snapshotpath="snapshots/${FUNCNAME[1]}.verified.json"
+    local receivedpath="${snapshotpath/.verified.json/.received.json}"
 
-scrubGradleTestOutput() {
-    cat | sed -E 's/\[Incubating\] Problems report is available at.*//g'
-}
-
-scrubMavenTestOutput() {
-    cat | sed -n '/T E S T S/,$p;' | sed -n '1,/BUILD FAILURE/p' | sed -E 's/Time elapsed: [0-9]+(\.[0-9]+)? s//g'
-}
-
-scrubPythonTestOutput() {
-    cat | sed -n '/=================================== FAILURES ===================================/,$p' | sed -E 's/.*fixtures\.py:[0-9]+://g; s/\.py:[0-9]+/\.py/g; s/0[xX][0-9a-fA-F]+//g; s/ in [0-9]+\.[0-9]+s//g; s/E .*//g'
-}
-
-scrubTypeScriptNodeTestOutput() {
-    cat | sed -r 's/\x1B\[[0-9;]*[mK]//g' | sed -n '/Failures:/,$p' | sed -E 's/at .*\.js:[0-9]+:[0-9]+\)//g; s/[0-9]+m[0-9]+\.[0-9]+s//g; s/\.feature:[0-9]+/.feature/g; s/\.js:[0-9]+/.js/g'
-}
-
-verifyText() {
-    local snapshotpath="snapshots/${FUNCNAME[1]}.verified.txt"
-    local receivedpath="${snapshotpath/.verified.txt/.received.txt}"
-
-    cat | tee "$receivedpath"
-    diff -q "$receivedpath" "$snapshotpath" > /dev/null
+    cat | tee -i "$receivedpath" | jd "$snapshotpath"
 }
 
 . /usr/share/shunit2/shunit2

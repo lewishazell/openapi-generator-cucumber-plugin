@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>{{testPackageName}}</AssemblyName>
     <RootNamespace>{{testPackageName}}</RootNamespace>
@@ -20,4 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\{{packageName}}\{{packageName}}.csproj" />
   </ItemGroup>
+
+  <ItemGroup>  
+    <Content Include="reqnroll.json" CopyToOutputDirectory="PreserveNewest" />  
+  </ItemGroup> 
 {{>netcore_testproject.additions}}</Project>

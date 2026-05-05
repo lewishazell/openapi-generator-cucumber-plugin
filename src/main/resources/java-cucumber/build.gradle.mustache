@@ -193,4 +193,6 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+
+    systemProperty "cucumber.plugin", "pretty, json:build/reports/cucumber-report.json"
 }

@@ -31,5 +31,6 @@ public class CSharpCucumberGenerator extends CSharpClientCodegen {
         final String testPackageFolder = testFolder + File.separator + testPackageName;
         supportingFiles.add(new SupportingFile("netcore_testproject.mustache", testPackageFolder, testPackageName + ".csproj"));
         supportingFiles.add(new SupportingFile("cucumber_steps.mustache", testPackageFolder, "StepDefinitions.cs"));
+        supportingFiles.add(new SupportingFile("reqnroll.mustache", testPackageFolder, "reqnroll.json"));
     }
 }

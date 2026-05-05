@@ -1,0 +1,462 @@
+[
+  {
+    "description": "The developer must be able to programmatically manage pets at the pet store",
+    "elements": [
+      {
+        "description": "This scenario ensures that the user can successfully retrieve a pet from the store by its ID.",
+        "id": "petstore-api;successfully-find-a-pet-at-the-pet-store",
+        "keyword": "Scenario",
+        "line": 4,
+        "name": "Successfully find a pet at the pet store",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 9,
+            "name": "the request is sent",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 10,
+            "name": "the response status should be 200",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}",
+                "line": 12
+              }
+            ],
+            "keyword": "And ",
+            "line": 11,
+            "name": "the response content should be:",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario ensures that the user can successfully retrieve a pet from the store by its ID, but asserts an incorrect response status.",
+        "id": "petstore-api;successfully-find-a-pet-at-the-pet-store-with-an-incorrect-response-status",
+        "keyword": "Scenario",
+        "line": 16,
+        "name": "Successfully find a pet at the pet store with an incorrect response status",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 19,
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 21,
+            "name": "the request is sent",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 22,
+            "name": "the response status should be 201",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}",
+                "line": 24
+              }
+            ],
+            "keyword": "And ",
+            "line": 23,
+            "name": "the response content should be:",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario ensures that the user can successfully retrieve a pet from the store by its ID, but asserts an incorrect response content.",
+        "id": "petstore-api;successfully-find-a-pet-at-the-pet-store-with-an-incorrect-response-content",
+        "keyword": "Scenario",
+        "line": 28,
+        "name": "Successfully find a pet at the pet store with an incorrect response content",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 31,
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 32,
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 33,
+            "name": "the request is sent",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 34,
+            "name": "the response status should be 200",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "{\"name\":\"Pickle\",\"tag\":\"cat\",\"id\":1}",
+                "line": 36
+              }
+            ],
+            "keyword": "And ",
+            "line": 35,
+            "name": "the response content should be:",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario verifies that a pet can be deleted successfully from the pet store using its ID.",
+        "id": "petstore-api;successfully-delete-a-pet-from-the-pet-store",
+        "keyword": "Scenario",
+        "line": 40,
+        "name": "Successfully delete a pet from the pet store",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 43,
+            "name": "there is a \"deletePet\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 44,
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 45,
+            "name": "the request is sent",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 46,
+            "name": "the response status should be 204",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario checks that the user can list pets at the pet store that match specified tags.",
+        "id": "petstore-api;successfully-list-all-pets-at-the-pet-store-with-a-matching-tag",
+        "keyword": "Scenario",
+        "line": 48,
+        "name": "Successfully list all pets at the pet store with a matching tag",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 51,
+            "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "-------"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "cat"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "dog"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 52,
+            "name": "the \"tags\" parameter has the following values:",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 57,
+            "name": "the \"limit\" parameter has a value of \"2\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 58,
+            "name": "the request is sent",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 59,
+            "name": "the response status should be 200",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "[{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}]",
+                "line": 61
+              }
+            ],
+            "keyword": "And ",
+            "line": 60,
+            "name": "the response content should be:",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario tests the ability to list all pets matching specified tags, but without any limits on the number of results.",
+        "id": "petstore-api;successfully-list-all-pets-at-the-pet-store-with-a-matching-tag-with-no-limit",
+        "keyword": "Scenario",
+        "line": 65,
+        "name": "Successfully list all pets at the pet store with a matching tag with no limit",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 68,
+            "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "-------"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "cat"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "dog"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 69,
+            "name": "the \"tags\" parameter has the following values:",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 74,
+            "name": "the request is sent",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 75,
+            "name": "the response status should be 200",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario ensures that a pet can be successfully added to the pet store.",
+        "id": "petstore-api;successfully-add-a-pet-to-the-pet-store",
+        "keyword": "Scenario",
+        "line": 77,
+        "name": "Successfully add a pet to the pet store",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 80,
+            "name": "there is an \"addPet\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "{\"name\": \"Pickle\", \"tag\": \"cat\"}",
+                "line": 82
+              }
+            ],
+            "keyword": "And ",
+            "line": 81,
+            "name": "the \"petDetails\" parameter has a JSON value of:",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 85,
+            "name": "the request is sent",
+            "result": {
+              "status": "undefined"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 86,
+            "name": "the response status should be 200",
+            "result": {
+              "status": "undefined"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "petstore-api",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "PetStore API",
+    "tags": [],
+    "uri": "features/PetStore.prism.feature"
+  }
+]
