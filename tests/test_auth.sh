@@ -46,7 +46,7 @@ testCSharpAccessTokenAuth() {
     filter "$FUNCNAME" || return 0
 
     local testdir="out/src/Earth.Test"
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g csharp-cucumber --package-name Earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g csharp-cucumber --package-name Earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000
     cp -r mocks/earth/features/ "$testdir/Features"
 
     (cd out && cucumber_access_token="valid-token" dotnet test)
@@ -58,7 +58,7 @@ testCSharpApiKeyAuth() {
     filter "$FUNCNAME" || return 0
 
     local testdir="out/src/Earth.Test"
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g csharp-cucumber --package-name Earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g csharp-cucumber --package-name Earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000
     cp -r mocks/earth/features/ "$testdir/Features"
     
     (cd out && cucumber_api_key="valid-api-key" cucumber_security_scheme="x-api-key" dotnet test)
@@ -69,7 +69,7 @@ testCSharpApiKeyAuth() {
 testGoAccessTokenAuth() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g go-cucumber --package-name earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g go-cucumber --package-name earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000
     cp -r mocks/earth/features/ out/test/features
     
     (cd out && go get -u -v all && cucumber_access_token="valid-token" go test ./... -godog.format=cucumber:report.json)
@@ -80,7 +80,7 @@ testGoAccessTokenAuth() {
 testGoApiKeyAuth() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g go-cucumber --package-name earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g go-cucumber --package-name earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000
     cp -r mocks/earth/features/ out/test/features
     
     (cd out && go get -u -v all && cucumber_api_key="valid-api-key" cucumber_security_scheme="ApiKeyAuth" go test ./... -godog.format=cucumber:report.json)
@@ -92,7 +92,7 @@ testJavaAccessTokenAuth() {
     filter "$FUNCNAME" || return 0
 
     local resourcesdir="out/src/test/resources/org/openapitools/client"
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name Earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name Earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000
     mkdir -p $resourcesdir
     cp -r mocks/earth/features/* $resourcesdir
     
@@ -105,7 +105,7 @@ testJavaApiKeyAuth() {
     filter "$FUNCNAME" || return 0
 
     local resourcesdir="out/src/test/resources/org/openapitools/client"
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name Earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name Earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000
     mkdir -p $resourcesdir
     cp -r mocks/earth/features/* $resourcesdir
     
@@ -117,7 +117,7 @@ testJavaApiKeyAuth() {
 testPythonAccessTokenAuth() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g python-cucumber --package-name earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g python-cucumber --package-name earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000
     cp -r mocks/earth/features/ out/test
     
     (cd out && pip install -r requirements.txt -r test-requirements.txt && cucumber_access_token="valid-token" pytest --cucumber-json cucumber-report.json)
@@ -128,7 +128,7 @@ testPythonAccessTokenAuth() {
 testPythonApiKeyAuth() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g python-cucumber --package-name earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g python-cucumber --package-name earth -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000
     cp -r mocks/earth/features/ out/test
     
     (cd out && pip install -r requirements.txt -r test-requirements.txt && cucumber_api_key="valid-api-key" cucumber_security_scheme="ApiKeyAuth" pytest --cucumber-json cucumber-report.json)
@@ -139,7 +139,7 @@ testPythonApiKeyAuth() {
 testTypeScriptNodeAccessTokenAuth() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000 -p npmName=earth
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000 -p npmName=earth
     cp mocks/earth/features/*.feature out/features
     
     (cd out && npm install && npm run build && cucumber_access_token="valid-token" npx cucumber-js --format progress --format json:cucumber-report.json)
@@ -150,7 +150,7 @@ testTypeScriptNodeAccessTokenAuth() {
 testTypeScriptNodeApiKeyAuth() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:3000 -p npmName=earth
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i mocks/earth/openapi.yaml -o out -p cucumberTargetHost=http://localhost:5000 -p npmName=earth
     cp mocks/earth/features/*.feature out/features
     
     (cd out && npm install && npm run build && cucumber_api_key="valid-api-key" cucumber_security_scheme="ApiKeyAuth" npx cucumber-js --format progress --format json:cucumber-report.json)

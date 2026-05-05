@@ -19,7 +19,7 @@ app.get('/the-meaning-of-life', (req, res) => {
   return res.json({ meaning: "42" });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Mock API server running at http://localhost:${PORT}`);
 });
