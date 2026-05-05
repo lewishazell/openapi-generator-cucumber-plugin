@@ -1,6 +1,0 @@
-test/test_cucumber.py .                                                  [ 25%]
-test/test_default_api.py .                                               [ 50%]
-test/test_get_the_meaning_of_life200_response.py .                       [ 75%]
-test/test_get_the_meaning_of_life401_response.py .                       [100%]
-
-============================== 4 passed ===============================

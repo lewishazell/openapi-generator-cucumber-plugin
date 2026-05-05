@@ -1,0 +1,71 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "earth-supercomputer-api;successfully-get-the-meaning-of-life",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "Successfully get the meaning of life",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "line": 5,
+            "name": "there is a \"getTheMeaningOfLife\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "Earth.Test.Earth.Test.StepDefinitions.CreateARequestForApi(String,String)"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 6,
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "Earth.Test.Earth.Test.StepDefinitions.SendTheRequest()"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 7,
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "Earth.Test.Earth.Test.StepDefinitions.TheResponseStatusIs(Int32)"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 8,
+            "name": "the response content should be:",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "Earth.Test.Earth.Test.StepDefinitions.TheResponseContentShouldBe(String)"
+            },
+            "doc_string": {
+              "content_type": "",
+              "line": 9,
+              "value": "{ \"meaning\": \"42\" }"
+            }
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "earth-supercomputer-api",
+    "keyword": "Feature",
+    "line": 1,
+    "name": "Earth Supercomputer API",
+    "uri": "Features/Earth.feature"
+  }
+]

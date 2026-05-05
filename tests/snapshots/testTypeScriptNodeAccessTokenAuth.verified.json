@@ -1,0 +1,84 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "earth-supercomputer-api;successfully-get-the-meaning-of-life",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "Successfully get the meaning of life",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 5,
+            "name": "there is a \"getTheMeaningOfLife\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:61"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 6,
+            "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:88"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 7,
+            "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:111"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "{ \"meaning\": \"42\" }",
+                "line": 9
+              }
+            ],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the response content should be:",
+            "match": {
+              "location": "features/step_definitions/steps.js:114"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "earth-supercomputer-api",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Earth Supercomputer API",
+    "tags": [],
+    "uri": "features/Earth.feature"
+  }
+]
