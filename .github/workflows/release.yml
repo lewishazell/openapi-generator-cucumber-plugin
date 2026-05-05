@@ -57,7 +57,7 @@ jobs:
         run: echo "JAR_PATH=target/openapi-generator-cucumber-plugin-$VERSION.jar" >> $GITHUB_ENV
 
       - name: Test release artifact
-        run: ./test_codegen.sh --jar-file "../$JAR_PATH"
+        run: ./test_codegen.sh --jar-file "../$JAR_PATH" && ./test_auth.sh --jar-file "../$JAR_PATH"
         working-directory: tests
 
       - name: Upload JAR to release

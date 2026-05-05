@@ -35,6 +35,9 @@ jobs:
       - name: Install shUnit2
         run: sudo apt install shunit2 -y
 
-      - name: Test java codegen
-        run: ./test_codegen.sh --filter testJavaCodegen*
+      - name: Setup test filter
+        run: echo "FILTER=testJava*" >> $GITHUB_ENV
+
+      - name: Test codegen
+        run: ./test_codegen.sh && ./test_auth.sh
         working-directory: tests

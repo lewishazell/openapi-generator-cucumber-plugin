@@ -34,6 +34,9 @@ jobs:
       - name: Install shUnit2
         run: sudo apt install shunit2 -y
 
-      - name: Test csharp codegen
-        run: ./test_codegen.sh --filter testCSharpCodegen
+      - name: Setup test filter
+        run: echo "FILTER=testCSharp*" >> $GITHUB_ENV
+
+      - name: Test codegen
+        run: ./test_codegen.sh && ./test_auth.sh
         working-directory: tests

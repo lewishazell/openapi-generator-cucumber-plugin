@@ -28,6 +28,10 @@ jobs:
       - name: Install shUnit2
         run: sudo apt install shunit2 -y
 
-      - name: Test python codegen
-        run: ./test_codegen.sh --filter testPythonCodegen
+
+      - name: Setup test filter
+        run: echo "FILTER=testPython*" >> $GITHUB_ENV
+
+      - name: Test codegen
+        run: ./test_codegen.sh && ./test_auth.sh
         working-directory: tests
