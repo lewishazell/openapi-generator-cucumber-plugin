@@ -108,7 +108,7 @@ testTypeScriptNodeCodegen() {
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010 -p npmName=petstore
     cp features/*.feature out/features
 
-    (cd out && npm install && npx cucumber-js --format progress --format json:cucumber-report.json)
+    (cd out && npm install && npm run build && npx cucumber-js --format progress --format json:cucumber-report.json)
     
     cat out/cucumber-report.json | scrubCucumberReport | verifyJson || fail "Received report differed from verified snapshot"
 }

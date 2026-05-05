@@ -10,12 +10,22 @@
         "name": "Successfully find a pet at the pet store",
         "steps": [
           {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
             "arguments": [],
             "keyword": "Given ",
             "line": 7,
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:67"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -23,8 +33,11 @@
             "keyword": "And ",
             "line": 8,
             "name": "the \"id\" parameter has a value of \"1\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:73"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -32,8 +45,11 @@
             "keyword": "When ",
             "line": 9,
             "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:172"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -41,8 +57,11 @@
             "keyword": "Then ",
             "line": 10,
             "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:198"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -55,8 +74,11 @@
             "keyword": "And ",
             "line": 11,
             "name": "the response content should be:",
+            "match": {
+              "location": "features/step_definitions/steps.js:201"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           }
         ],
@@ -71,12 +93,22 @@
         "name": "Successfully find a pet at the pet store with an incorrect response status",
         "steps": [
           {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
             "arguments": [],
             "keyword": "Given ",
             "line": 19,
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:67"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -84,8 +116,11 @@
             "keyword": "And ",
             "line": 20,
             "name": "the \"id\" parameter has a value of \"1\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:73"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -93,8 +128,11 @@
             "keyword": "When ",
             "line": 21,
             "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:172"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -102,8 +140,11 @@
             "keyword": "Then ",
             "line": 22,
             "name": "the response status should be 201",
+            "match": {
+              "location": "features/step_definitions/steps.js:198"
+            },
             "result": {
-              "status": "undefined"
+              "status": "failed"
             }
           },
           {
@@ -116,8 +157,11 @@
             "keyword": "And ",
             "line": 23,
             "name": "the response content should be:",
+            "match": {
+              "location": "features/step_definitions/steps.js:201"
+            },
             "result": {
-              "status": "undefined"
+              "status": "skipped"
             }
           }
         ],
@@ -132,12 +176,22 @@
         "name": "Successfully find a pet at the pet store with an incorrect response content",
         "steps": [
           {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
             "arguments": [],
             "keyword": "Given ",
             "line": 31,
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:67"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -145,8 +199,11 @@
             "keyword": "And ",
             "line": 32,
             "name": "the \"id\" parameter has a value of \"1\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:73"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -154,8 +211,11 @@
             "keyword": "When ",
             "line": 33,
             "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:172"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -163,8 +223,11 @@
             "keyword": "Then ",
             "line": 34,
             "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:198"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -177,8 +240,11 @@
             "keyword": "And ",
             "line": 35,
             "name": "the response content should be:",
+            "match": {
+              "location": "features/step_definitions/steps.js:201"
+            },
             "result": {
-              "status": "undefined"
+              "status": "failed"
             }
           }
         ],
@@ -193,12 +259,22 @@
         "name": "Successfully delete a pet from the pet store",
         "steps": [
           {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
             "arguments": [],
             "keyword": "Given ",
             "line": 43,
             "name": "there is a \"deletePet\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:67"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -206,8 +282,11 @@
             "keyword": "And ",
             "line": 44,
             "name": "the \"id\" parameter has a value of \"1\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:73"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -215,8 +294,11 @@
             "keyword": "When ",
             "line": 45,
             "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:172"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -224,8 +306,11 @@
             "keyword": "Then ",
             "line": 46,
             "name": "the response status should be 204",
+            "match": {
+              "location": "features/step_definitions/steps.js:198"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           }
         ],
@@ -240,12 +325,22 @@
         "name": "Successfully list all pets at the pet store with a matching tag",
         "steps": [
           {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
             "arguments": [],
             "keyword": "Given ",
             "line": 51,
             "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:67"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -278,8 +373,11 @@
             "keyword": "And ",
             "line": 52,
             "name": "the \"tags\" parameter has the following values:",
+            "match": {
+              "location": "features/step_definitions/steps.js:138"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -287,8 +385,11 @@
             "keyword": "And ",
             "line": 57,
             "name": "the \"limit\" parameter has a value of \"2\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:73"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -296,8 +397,11 @@
             "keyword": "When ",
             "line": 58,
             "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:172"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -305,8 +409,11 @@
             "keyword": "Then ",
             "line": 59,
             "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:198"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -319,8 +426,11 @@
             "keyword": "And ",
             "line": 60,
             "name": "the response content should be:",
+            "match": {
+              "location": "features/step_definitions/steps.js:201"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           }
         ],
@@ -335,12 +445,22 @@
         "name": "Successfully list all pets at the pet store with a matching tag with no limit",
         "steps": [
           {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
             "arguments": [],
             "keyword": "Given ",
             "line": 68,
             "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:67"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -373,8 +493,11 @@
             "keyword": "And ",
             "line": 69,
             "name": "the \"tags\" parameter has the following values:",
+            "match": {
+              "location": "features/step_definitions/steps.js:138"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -382,8 +505,11 @@
             "keyword": "When ",
             "line": 74,
             "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:172"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -391,8 +517,11 @@
             "keyword": "Then ",
             "line": 75,
             "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:198"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           }
         ],
@@ -407,12 +536,22 @@
         "name": "Successfully add a pet to the pet store",
         "steps": [
           {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
             "arguments": [],
             "keyword": "Given ",
             "line": 80,
             "name": "there is an \"addPet\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:70"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -425,8 +564,11 @@
             "keyword": "And ",
             "line": 81,
             "name": "the \"petDetails\" parameter has a JSON value of:",
+            "match": {
+              "location": "features/step_definitions/steps.js:105"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -434,8 +576,11 @@
             "keyword": "When ",
             "line": 85,
             "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:172"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           },
           {
@@ -443,8 +588,11 @@
             "keyword": "Then ",
             "line": 86,
             "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:198"
+            },
             "result": {
-              "status": "undefined"
+              "status": "passed"
             }
           }
         ],
