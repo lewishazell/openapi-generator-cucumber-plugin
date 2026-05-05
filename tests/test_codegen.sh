@@ -62,7 +62,7 @@ testGoCodegen() {
     
     (cd out && go get -u -v all && go test ./... -godog.format=cucumber:report.json)
     
-    cat out/cucumber-report.json | scrubCucumberReport | verifyJson || fail "Received output differed from verified snapshot"
+    cat out/test/report.json | scrubCucumberReport | verifyJson || fail "Received output differed from verified snapshot"
 }
 
 testJavaCodegenWithGradle() {
@@ -114,7 +114,7 @@ testTypeScriptNodeCodegen() {
 }
 
 tearDown() {
-    echo "rm -r out"
+    rm -r out
 }
 
 oneTimeTearDown() {
