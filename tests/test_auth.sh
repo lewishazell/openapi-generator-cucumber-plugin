@@ -34,6 +34,8 @@ oneTimeSetUp() {
 
     echo "Using JAR: $JAR_FILE"
 
+    (cd mocks/earth && npm install)
+    
     node mocks/earth/app.js &>/dev/null &
     EARTH_PID=$!
 }
