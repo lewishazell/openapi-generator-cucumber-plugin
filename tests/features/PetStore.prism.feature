@@ -78,9 +78,18 @@ Scenario: Successfully add a pet to the pet store
 This scenario ensures that a pet can be successfully added to the pet store.
 
 Given there is an "addPet" request for the "DefaultApi"
-And the "petDetails" parameter has a JSON value of:
+And the "PetDetails" parameter has a JSON value of:
   """
   {"name": "Pickle", "tag": "cat"}
   """
 When the request is sent
 Then the response status should be 200
+
+Scenario: Successfully upload a picture of a pet
+This scenario ensures that a picture of a pet can be successfully uploaded to the pet store.
+
+Given there is an "addPetPhotoById" request for the "DefaultApi"
+And the "id" parameter has a value of "1"
+And the "file" parameter is the file "photo.jpg"
+When the request is sent
+Then the response status should be 201

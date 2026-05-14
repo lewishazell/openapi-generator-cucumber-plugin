@@ -122,6 +122,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /pets/{id}/photo:
+    put:
+      description: Adds a photo of a single pet based on the ID supplied
+      operationId: addPetPhotoById
+      parameters:
+        - name: id
+          in: path
+          description: ID of pet to add photo of
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: photo added
+        default:
+          description: unexpect error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Pet:

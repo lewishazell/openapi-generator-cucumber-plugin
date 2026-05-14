@@ -47,9 +47,11 @@ testCSharpCodegen() {
 
     local testdir="out/src/PetStore.Test"
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g csharp-cucumber --package-name PetStore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
-    cp -r features/ "$testdir/Features"
+    cp -r features/ $testdir/Features
+    (cd out && dotnet build)
+    cp files/* $testdir/bin/Debug/net*
 
-    (cd out && dotnet test)
+    (cd out && dotnet test --no-build)
 
     cat $testdir/bin/Debug/*/reqnroll_report.ndjson | cucumber-json-formatter | scrubCucumberReport | verifyJson || fail "Received output differed from verified snapshot"
 }
@@ -58,7 +60,8 @@ testGoCodegen() {
     filter "$FUNCNAME" || return 0
 
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g go-cucumber --package-name petstore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
-    cp -r features/ out/test/features
+    cp -r features/ out/test/features/
+    cp files/* out/test
     
     (cd out && go get -u -v all && go test ./... -godog.format=cucumber:report.json)
     
@@ -72,6 +75,7 @@ testJavaCodegenWithGradle() {
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name PetStore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
     mkdir -p $resourcesdir
     cp -r features/* $resourcesdir
+    cp -r files/* out
     
     (cd out && gradle test)
     
@@ -96,6 +100,7 @@ testPythonCodegen() {
 
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g python-cucumber --package-name petstore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
     cp -r features/ out/test
+    cp files/* out
 
     (cd out && pip install -r requirements.txt -r test-requirements.txt && pytest --cucumber-json cucumber-report.json)
     
@@ -107,6 +112,7 @@ testTypeScriptNodeCodegen() {
 
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010 -p npmName=petstore
     cp features/*.feature out/features
+    cp files/* out
 
     (cd out && npm install && npm run build && npx cucumber-js --format progress --format json:cucumber-report.json)
     
