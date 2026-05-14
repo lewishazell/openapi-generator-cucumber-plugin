@@ -20,7 +20,7 @@
             "name": "there is a \"getTheMeaningOfLife\" request for the \"DefaultApi\"",
             "line": 5,
             "match": {
-              "location": "godogs_test.go:253"
+              "location": "godogs_test.go:276"
             },
             "result": {
               "status": "passed"
@@ -31,7 +31,7 @@
             "name": "the request is sent",
             "line": 6,
             "match": {
-              "location": "godogs_test.go:258"
+              "location": "godogs_test.go:282"
             },
             "result": {
               "status": "passed"
@@ -42,7 +42,7 @@
             "name": "the response status should be 200",
             "line": 7,
             "match": {
-              "location": "godogs_test.go:259"
+              "location": "godogs_test.go:283"
             },
             "result": {
               "status": "passed"
@@ -58,7 +58,7 @@
               "line": 9
             },
             "match": {
-              "location": "godogs_test.go:260"
+              "location": "godogs_test.go:284"
             },
             "result": {
               "status": "passed"

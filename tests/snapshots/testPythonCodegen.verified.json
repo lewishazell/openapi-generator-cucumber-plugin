@@ -416,7 +416,7 @@
           },
           {
             "keyword": "And",
-            "name": "the \"petDetails\" parameter has a JSON value of:",
+            "name": "the \"PetDetails\" parameter has a JSON value of:",
             "line": 81,
             "match": {
               "location": ""
@@ -440,6 +440,72 @@
             "keyword": "Then",
             "name": "the response status should be 200",
             "line": 86,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_successfully_upload_a_picture_of_a_pet",
+        "name": "Successfully upload a picture of a pet",
+        "line": 88,
+        "description": "This scenario ensures that a picture of a pet can be successfully uploaded to the pet store.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is an \"addPetPhotoById\" request for the \"DefaultApi\"",
+            "line": 91,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "line": 92,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"file\" parameter is the file \"photo.jpg\"",
+            "line": 93,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 94,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 201",
+            "line": 95,
             "match": {
               "location": ""
             },

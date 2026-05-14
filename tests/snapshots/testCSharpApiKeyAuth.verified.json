@@ -17,7 +17,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "Earth.Test.Earth.Test.StepDefinitions.CreateARequestForApi(String,String)"
+              "location": "Earth.Test.Earth.Test.StepDefinitions.GivenThereIsARequestForTheApi(String,String)"
             }
           },
           {
@@ -28,7 +28,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "Earth.Test.Earth.Test.StepDefinitions.SendTheRequest()"
+              "location": "Earth.Test.Earth.Test.StepDefinitions.WhenTheRequestIsSent()"
             }
           },
           {
@@ -39,7 +39,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "Earth.Test.Earth.Test.StepDefinitions.TheResponseStatusIs(Int32)"
+              "location": "Earth.Test.Earth.Test.StepDefinitions.ThenTheResponseStatusIs(Int32)"
             }
           },
           {
@@ -50,7 +50,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "Earth.Test.Earth.Test.StepDefinitions.TheResponseContentShouldBe(String)"
+              "location": "Earth.Test.Earth.Test.StepDefinitions.ThenTheResponseContentShouldBe(String)"
             },
             "doc_string": {
               "content_type": "",

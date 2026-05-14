@@ -34,7 +34,7 @@
             "line": 6,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:88"
+              "location": "features/step_definitions/steps.js:95"
             },
             "result": {
               "status": "passed"
@@ -46,7 +46,7 @@
             "line": 7,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:111"
+              "location": "features/step_definitions/steps.js:118"
             },
             "result": {
               "status": "passed"
@@ -63,7 +63,7 @@
             "line": 8,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:114"
+              "location": "features/step_definitions/steps.js:121"
             },
             "result": {
               "status": "passed"

@@ -19,7 +19,7 @@
             "keyword": "Given ",
             "line": 5,
             "match": {
-              "location": "org.openapitools.client.StepDefinitions.createARequestForApi(java.lang.String,java.lang.String)",
+              "location": "org.openapitools.client.StepDefinitions.givenThereIsARequestForTheApi(java.lang.String,java.lang.String)",
               "arguments": [
                 {
                   "val": "\"getTheMeaningOfLife\"",
@@ -40,7 +40,7 @@
             "keyword": "When ",
             "line": 6,
             "match": {
-              "location": "org.openapitools.client.StepDefinitions.sendTheRequest()"
+              "location": "org.openapitools.client.StepDefinitions.whenTheRequestIsSent()"
             },
             "name": "the request is sent",
             "result": {
@@ -68,7 +68,7 @@
             "keyword": "And ",
             "line": 8,
             "match": {
-              "location": "org.openapitools.client.StepDefinitions.theResponseContentShouldBe(io.cucumber.docstring.DocString)"
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseContentShouldBe(io.cucumber.docstring.DocString)"
             },
             "name": "the response content should be:",
             "result": {
