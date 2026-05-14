@@ -34,7 +34,7 @@ oneTimeSetUp() {
 
     echo "Using JAR: $JAR_FILE"
 
-    prism mock petstore-extended.yaml &>/dev/null &
+    prism mock mocks/petstore/petstore-extended.yaml &>/dev/null &
     PRISM_PID=$!
 }
 
@@ -46,10 +46,10 @@ testCSharpCodegen() {
     filter "$FUNCNAME" || return 0
 
     local testdir="out/src/PetStore.Test"
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g csharp-cucumber --package-name PetStore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
-    cp -r features/ $testdir/Features
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g csharp-cucumber --package-name PetStore -i mocks/petstore/petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
+    cp -r mocks/petstore/features/ $testdir/Features
     (cd out && dotnet build)
-    cp files/* $testdir/bin/Debug/net*
+    cp mocks/petstore/files/* $testdir/bin/Debug/net*
 
     (cd out && dotnet test --no-build)
 
@@ -59,9 +59,9 @@ testCSharpCodegen() {
 testGoCodegen() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g go-cucumber --package-name petstore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
-    cp -r features/ out/test/features/
-    cp files/* out/test
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g go-cucumber --package-name petstore -i mocks/petstore/petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
+    cp -r mocks/petstore/features/ out/test/features/
+    cp mocks/petstore/files/* out/test
     
     (cd out && go get -u -v all && go test ./... -godog.format=cucumber:report.json)
     
@@ -72,10 +72,10 @@ testJavaCodegenWithGradle() {
     filter "$FUNCNAME" || return 0
 
     local resourcesdir="out/src/test/resources/org/openapitools/client"
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name PetStore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name PetStore -i mocks/petstore/petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
     mkdir -p $resourcesdir
-    cp -r features/* $resourcesdir
-    cp -r files/* out
+    cp -r mocks/petstore/features/* $resourcesdir
+    cp -r mocks/petstore/files/* out
     
     (cd out && gradle test)
     
@@ -86,9 +86,9 @@ testJavaCodegenWithMaven() {
     filter "$FUNCNAME" || return 0
 
     local resourcesdir="out/src/test/resources/org/openapitools/client"
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name PetStore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name PetStore -i mocks/petstore/petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
     mkdir -p $resourcesdir
-    cp -r features/* $resourcesdir
+    cp -r mocks/petstore/features/* $resourcesdir
     
     (cd out && mvn test)
     
@@ -98,9 +98,9 @@ testJavaCodegenWithMaven() {
 testPythonCodegen() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g python-cucumber --package-name petstore -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
-    cp -r features/ out/test
-    cp files/* out
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g python-cucumber --package-name petstore -i mocks/petstore/petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
+    cp -r mocks/petstore/features/ out/test
+    cp mocks/petstore/files/* out
 
     (cd out && pip install -r requirements.txt -r test-requirements.txt && pytest --cucumber-json cucumber-report.json)
     
@@ -110,9 +110,9 @@ testPythonCodegen() {
 testTypeScriptNodeCodegen() {
     filter "$FUNCNAME" || return 0
 
-    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010 -p npmName=petstore
-    cp features/*.feature out/features
-    cp files/* out
+    openapi-generator-cli --custom-generator "$JAR_FILE" generate -g typescript-node-cucumber -i mocks/petstore/petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010 -p npmName=petstore
+    cp mocks/petstore/features/*.feature out/features
+    cp mocks/petstore/files/* out
 
     (cd out && npm install && npm run build && npx cucumber-js --format progress --format json:cucumber-report.json)
     
