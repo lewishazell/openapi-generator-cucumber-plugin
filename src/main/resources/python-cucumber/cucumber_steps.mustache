@@ -67,15 +67,15 @@ def test_context():
 scenarios("features/")
 
 @given(parsers.parse('there is a "{operation_id}" request for the "{classname}"'))
-def create_a_request_for_the_api(test_context, operation_id, classname):
+def given_there_is_a_request_for_the_api(test_context, operation_id, classname):
     test_context["request"] = Request(classname, operation_id)
 
 @given(parsers.parse('there is an "{operation_id}" request for the "{classname}"'))
-def create_an_request_for_the_api(test_context, operation_id, classname):
+def given_there_is_an_request_for_the_api(test_context, operation_id, classname):
     test_context["request"] = Request(classname, operation_id)
 
 @given(parsers.parse('the "{parameter}" parameter has a value of "{value}"'))
-def give_the_parameter_a_value_of(test_context, parameter, value):
+def given_the_parameter_has_a_value_of(test_context, parameter, value):
     request = test_context["request"]
 
     {{#apiInfo.apis}}
@@ -87,9 +87,14 @@ def give_the_parameter_a_value_of(test_context, parameter, value):
             pass
             {{/hasParams}}
             {{#allParams}}
-            if parameter == "{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}":
-                request.parameters["{{paramName}}"] = convert_to({{{dataType}}}, value)
+            if parameter == "{{baseName}}":
+                {{^isFile}}
+                request.parameters[parameter] = convert_to({{{dataType}}}, value)
                 return
+                {{/isFile}}
+                {{#isFile}}
+                raise ValueError("The file parameter {{baseName}} cannot be set to a constant value");
+                {{/isFile}}
             {{/allParams}}
         {{/operation}}
         {{/operations}}
@@ -98,7 +103,7 @@ def give_the_parameter_a_value_of(test_context, parameter, value):
     raise ValueError(f"{request.classname}.{request.operation_id} does not have a parameter called {parameter}")
 
 @given(parsers.parse('the "{parameter}" parameter has a JSON value of:'))
-def give_the_parameter_a_json_value_of(test_context, parameter, docstring):
+def given_the_parameter_has_a_json_value_of(test_context, parameter, docstring):
     request = test_context["request"]
 
     {{#apiInfo.apis}}
@@ -110,7 +115,7 @@ def give_the_parameter_a_json_value_of(test_context, parameter, docstring):
             pass
             {{/hasParams}}
             {{#allParams}}
-            if parameter == "{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}":
+            if parameter == "{{baseName}}":
                 {{#isModel}}
                 request.parameters[parameter] = {{modelPackage}}.{{{dataType}}}.from_json(docstring)
                 return
@@ -126,7 +131,7 @@ def give_the_parameter_a_json_value_of(test_context, parameter, docstring):
     raise ValueError(f"{request.classname}.{request.operation_id} does not have a parameter called {parameter}")
 
 @given(parsers.parse('the "{parameter}" parameter has the following values:'))
-def give_the_parameter_the_following_values(test_context, parameter, datatable):
+def given_the_parameter_has_the_following_values(test_context, parameter, datatable):
     request = test_context["request"]
     
     {{#apiInfo.apis}}
@@ -138,16 +143,16 @@ def give_the_parameter_the_following_values(test_context, parameter, datatable):
             pass
             {{/hasParams}}
             {{#allParams}}
-            if parameter == "{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}":
+            if parameter == "{{baseName}}":
                 {{#isContainer}}
                 collection = list[{{{baseType}}}]()
                 for row in datatable:
                     collection.append(convert_to({{{baseType}}}, row[0]))
-                request.parameters["{{paramName}}"] = collection
+                request.parameters[parameter] = collection
                 return
                 {{/isContainer}}
                 {{^isContainer}}
-                raise TypeError("Cannot read a DataTable into parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}} as it is not an array")
+                raise TypeError("Cannot read a DataTable into parameter {{baseName}} as it is not an array")
                 {{/isContainer}}
             {{/allParams}}
         {{/operation}}
@@ -156,8 +161,38 @@ def give_the_parameter_the_following_values(test_context, parameter, datatable):
 
     raise ValueError(f"{request.classname}.{request.operation_id} does not have a parameter called {parameter}")
 
+@given(parsers.parse('the "{parameter}" parameter is the file "{file}"'))
+def given_the_parameter_is_the_file(test_context, parameter, file):
+    request = test_context["request"]
+
+    {{#apiInfo.apis}}
+    if request.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}":
+        {{#operations}}
+        {{#operation}}
+        if request.operation_id == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}":
+            {{^hasParams}}
+            pass
+            {{/hasParams}}
+            {{#allParams}}
+            if parameter == "{{baseName}}":
+                {{#isFile}}
+                with open(file, "rb") as f:
+                    request.parameters[parameter] = bytes(f.read())
+                
+                return
+                {{/isFile}}
+                {{^isFile}}
+                raise ValueError("The parameter {{baseName}} is not a file")
+                {{/isFile}}
+            {{/allParams}}
+        {{/operation}}
+        {{/operations}}
+    {{/apiInfo.apis}}
+
+    raise ValueError(f"{request.classname}.{request.operation_id} does not have a parameter called {parameter}")
+
 @when('the request is sent')
-def send_the_request(test_context):
+def when_the_request_is_sent(test_context):
     request = test_context["request"]
     
     {{#apiInfo.apis}}
@@ -167,17 +202,17 @@ def send_the_request(test_context):
         {{#operations}}
         {{#operation}}
         if request.operation_id == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}":
-            test_context["response"] = api.{{operationId}}_with_http_info({{#allParams}}request.parameters.get("{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}"){{^-last}}, {{/-last}}{{/allParams}})
+            test_context["response"] = api.{{operationId}}_with_http_info({{#allParams}}request.parameters.get("{{baseName}}"){{^-last}}, {{/-last}}{{/allParams}})
         {{/operation}}
         {{/operations}}
     {{/apiInfo.apis}}
 
 @then(parsers.parse('the response status should be {status_code}'))
-def the_response_status_should_be(test_context, status_code):
+def then_the_response_status_should_be(test_context, status_code):
     assert test_context["response"].status_code == int(status_code)
 
 @then(parsers.parse("the response content should be:"))
-def the_response_content_should_be(test_context, docstring):
+def then_the_response_content_should_be(test_context, docstring):
     content_type = ""
     if test_context["response"].headers is not None:
         headers_lower = {k.lower(): v for k, v in test_context["response"].headers.items()}

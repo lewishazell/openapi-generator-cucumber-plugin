@@ -21,6 +21,7 @@ import io.cucumber.docstring.DocString;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -97,31 +98,36 @@ public class StepDefinitions {
     }
 
     @Given("there is a {string} request for the {string}")
-    public void createARequestForApi(String operationId, String classname) {
+    public void givenThereIsARequestForTheApi(String operationId, String classname) {
         request = new Request(classname, operationId);
     }
 
     @Given("there is an {string} request for the {string}")
-    public void createAnRequestForApi(String operationId, String classname) {
+    public void givenThereIsAnRequestForTheApi(String operationId, String classname) {
         request = new Request(classname, operationId);
     }
 
     @Given("the {string} parameter has a value of {string}")
-    public void giveTheParameterAValueOf(String parameter, String value) {
+    public void givenTheParameterHasAValueOf(String parameter, String value) {
         {{#apiInfo.apis}}
         if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
             {{#operations}}
             {{#operation}}
             if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
                 {{#allParams}}
-                if ("{{paramName}}".equals(parameter)) {
+                if ("{{baseName}}".equals(parameter)) {
                     {{^isContainer}}
-                    request.getParameters().put("{{paramName}}", Converter.convertTo({{{dataType}}}.class, value));
+                    {{^isFile}}
+                    request.getParameters().put("{{baseName}}", Converter.convertTo({{{dataType}}}.class, value));
                     return;
+                    {{/isFile}}
                     {{/isContainer}}
                     {{#isContainer}}
-                    throw new IllegalArgumentException("Cannot set collection parameter {{paramName}} from String value");
+                    throw new IllegalArgumentException("Cannot set collection parameter {{baseName}} from String value");
                     {{/isContainer}}
+                    {{#isFile}}
+                    throw new IllegalArgumentException("The file parameter {{baseName}} cannot be set to a constant value");
+                    {{/isFile}}
                 }
                 {{^-last}}
 
@@ -140,14 +146,15 @@ public class StepDefinitions {
     }
 
     @Given("the {string} parameter has a JSON value of:")
-    public void giveTheParameterAJsonValueOf(String parameter, String value) throws Exception {
+    public void givenTheParameterHasAJsonValueOf(String parameter, String value) throws Exception {
         {{#apiInfo.apis}}
         if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
             {{#operations}}
             {{#operation}}
             if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
                 {{#allParams}}
-                if ("{{paramName}}".equals(parameter)) {
+                if ("{{baseName}}".equals(parameter)) {
+                    {{^isFile}}
                     {{^isContainer}}
                     Object deserialized = gson.fromJson(value, {{dataType}}.class);
                     {{/isContainer}}
@@ -155,8 +162,12 @@ public class StepDefinitions {
                     Type type = TypeToken.getParameterized(List.class, {{baseType}}.class).getType();
                     Object deserialized = gson.fromJson(value, type);
                     {{/isContainer}}
-                    request.getParameters().put("{{paramName}}", deserialized);
+                    request.getParameters().put("{{baseName}}", deserialized);
                     return;
+                    {{/isFile}}
+                    {{#isFile}}
+                    throw new IllegalArgumentException("The file parameter {{baseName}} cannot be set to a constant value");
+                    {{/isFile}}
                 }
                 {{^-last}}
 
@@ -175,25 +186,25 @@ public class StepDefinitions {
     }
 
     @Given("the {string} parameter has the following values:")
-    public void giveTheParameterTheFollowingValues(String parameter, DataTable table) {
+    public void givenTheParameterHasTheFollowingValues(String parameter, DataTable table) {
         {{#apiInfo.apis}}
         if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
             {{#operations}}
             {{#operation}}
                 if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
                 {{#allParams}}
-                if ("{{paramName}}".equals(parameter)) {
+                if ("{{baseName}}".equals(parameter)) {
                     {{#isContainer}}
                     {{{dataType}}} collection = new ArrayList<{{{baseType}}}>();
                     for (String value : table.column(0)) {
                         collection.add(Converter.convertTo({{{baseType}}}.class, value));
                     }
 
-                    request.getParameters().put("{{paramName}}", collection);
+                    request.getParameters().put("{{baseName}}", collection);
                     return;
                     {{/isContainer}}
                     {{^isContainer}}
-                    throw new UnsupportedOperationException("Cannot read a DataTable into non-collection parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}");
+                    throw new UnsupportedOperationException("Cannot read a DataTable into non-collection parameter {{#lambda.camelcase}}{{baseName}}{{/lambda.camelcase}}");
                     {{/isContainer}}
                 }
                 {{^-last}}
@@ -212,8 +223,41 @@ public class StepDefinitions {
         throw new IllegalArgumentException(request.getClassname() + "." + request.getOperationId() + " does not have a parameter called " + parameter);
     }
 
+    @Given("the {string} parameter is the file {string}")
+    public void givenTheParameterIsTheFile(String parameter, String path) {
+        {{#apiInfo.apis}}
+        if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
+            {{#operations}}
+            {{#operation}}
+            if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
+                {{#allParams}}
+                if ("{{baseName}}".equals(parameter)) {
+                    {{#isFile}}
+                    request.getParameters().put("{{baseName}}", new File(path));
+                    return;
+                    {{/isFile}}
+                    {{^isFile}}
+                    throw new IllegalArgumentException("The parameter {{baseName}} is not a file");
+                    {{/isFile}}
+                }
+                {{^-last}}
+
+                {{/-last}}
+                {{/allParams}}
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/operation}}
+            {{/operations}}
+        }
+        
+        {{/apiInfo.apis}}
+        throw new IllegalArgumentException(request.getClassname() + "." + request.getOperationId() + " does not have a parameter called " + parameter);
+    }
+
     @When("the request is sent")
-    public void sendTheRequest() throws ApiException {
+    public void whenTheRequestIsSent() throws ApiException {
         {{#apiInfo.apis}}
         if ("{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}".equals(request.getClassname())) {
             {{classname}} api = new {{classname}}(apiClient);
@@ -221,7 +265,7 @@ public class StepDefinitions {
             {{#operations}}
             {{#operation}}
             if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
-                response = api.{{operationId}}WithHttpInfo({{#allParams}}({{{dataType}}})request.getParameters().get("{{paramName}}"){{^-last}}, {{/-last}}{{/allParams}});
+                response = api.{{operationId}}WithHttpInfo({{#allParams}}({{{dataType}}})request.getParameters().get("{{baseName}}"){{^-last}}, {{/-last}}{{/allParams}});
             }
             {{^-last}}
 
@@ -238,7 +282,7 @@ public class StepDefinitions {
     }
 
     @Then("the response content should be:")
-    public void theResponseContentShouldBe(DocString content) {
+    public void thenTheResponseContentShouldBe(DocString content) {
         String contentType = null;
 
         if (response.getHeaders().containsKey("Content-Type")) {

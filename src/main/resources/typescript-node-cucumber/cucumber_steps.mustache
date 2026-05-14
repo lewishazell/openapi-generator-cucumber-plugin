@@ -71,14 +71,19 @@ Given('the {string} parameter has a value of {string}', function(parameter: stri
         {{#operation}}
         if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
             {{#allParams}}
-            if (parameter == "{{paramName}}") {
+            if (parameter == "{{baseName}}") {
                 {{^isContainer}}
-                ctx.request.parameters["{{paramName}}"] = value;
+                {{^isFile}}
+                ctx.request.parameters[parameter] = value;
                 return;
+                {{/isFile}}
                 {{/isContainer}}
                 {{#isContainer}}
-                throw new Error("Cannot set collection parameter {{paramName}} from String value");
+                throw new Error("Cannot set collection parameter {{baseName}} from String value");
                 {{/isContainer}}
+                {{#isFile}}
+                throw new Error("The file parameter {{baseName}} cannot be set to a constant value");
+                {{/isFile}}
             }
             {{^-last}}
 
@@ -103,9 +108,14 @@ Given('the {string} parameter has a JSON value of:', function(parameter: string,
         {{#operation}}
         if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
             {{#allParams}}
-            if (parameter == "{{paramName}}") {
-                ctx.request.parameters["{{paramName}}"] = JSON.parse(value);
+            if (parameter == "{{baseName}}") {
+                {{^isFile}}
+                ctx.request.parameters[parameter] = JSON.parse(value);
                 return;
+                {{/isFile}}
+                {{#isFile}}
+                throw new Error("The file parameter {{baseName}} cannot be set to a constant value");
+                {{/isFile}}
             }
             {{^-last}}
 
@@ -130,7 +140,7 @@ Given('the {string} parameter has the following values:', function(parameter: st
         {{#operation}}
         if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
             {{#allParams}}
-            if (parameter == "{{paramName}}") {
+            if (parameter == "{{baseName}}") {
                 {{#isContainer}}
                 const collection: any[] = [];
                 for (const row of table.hashes()) {
@@ -138,11 +148,11 @@ Given('the {string} parameter has the following values:', function(parameter: st
                     collection.push(value);
                 }
 
-                ctx.request.parameters["{{paramName}}"] = collection;
+                ctx.request.parameters[parameter] = collection;
                 return;
                 {{/isContainer}}
                 {{^isContainer}}
-                throw new Error("Cannot read a DataTable into non-collection parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}");
+                throw new Error("Cannot read a DataTable into non-collection parameter {{baseName}}");
                 {{/isContainer}}
             }
             {{^-last}}
@@ -157,6 +167,40 @@ Given('the {string} parameter has the following values:', function(parameter: st
         {{/operations}}
     }
 
+    {{/apiInfo.apis}}
+    throw new Error(`${ctx.request?.classname}.${ctx.request?.operationId} does not have a parameter called ${parameter}`);
+});
+
+
+Given('the {string} parameter is the file {string}', function(parameter: string, file: string) {
+    {{#apiInfo.apis}}
+    if (ctx.request?.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}") {
+        {{#operations}}
+        {{#operation}}
+        if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
+            {{#allParams}}
+            if (parameter == "{{baseName}}") {
+                {{^isContainer}}
+                // {{baseType}}
+                ctx.request.parameters[parameter] = Buffer.from(file);
+                return;
+                {{/isContainer}}
+                {{#isContainer}}
+                throw new Error("Cannot set collection parameter {{baseName}} from String value");
+                {{/isContainer}}
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/allParams}}
+        }
+        {{^-last}}
+
+        {{/-last}}
+        {{/operation}}
+        {{/operations}}
+    }
+    
     {{/apiInfo.apis}}
     throw new Error(`${ctx.request?.classname}.${ctx.request?.operationId} does not have a parameter called ${parameter}`);
 });
@@ -190,7 +234,7 @@ When('the request is sent', async function() {
         {{#operation}}
 
         if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
-            let { response, body } = await api.{{operationId}}({{#allParams}}ctx.request.parameters["{{paramName}}"]{{^-last}}, {{/-last}}{{/allParams}});
+            let { response, body } = await api.{{operationId}}({{#allParams}}ctx.request.parameters["{{baseName}}"]{{^-last}}, {{/-last}}{{/allParams}});
             ctx.response = { message: response, body };
 
             return;

@@ -1,3 +1,4 @@
+
 {{>partial_header}}
 using System;
 using System.IO;
@@ -92,19 +93,19 @@ namespace {{packageName}}.Test
         }
 
         [Given("there is a {string} request for the {string}")]
-        public void CreateARequestForApi(string operationId, string classname)
+        public void GivenThereIsARequestForTheApi(string operationId, string classname)
         {
             request = new Request(classname, operationId);
         }
 
         [Given("there is an {string} request for the {string}")]
-        public void CreateAnRequestForApi(string operationId, string classname)
+        public void GivenThereIsAnRequestForTheApi(string operationId, string classname)
         {
             request = new Request(classname, operationId);
         }
 
         [Given("the {string} parameter has a value of {string}")]
-        public void GiveTheParameterAValueOf(string parameter, string value)
+        public void GivenTheParameterAValueOf(string parameter, string value)
         {
             {{#apiInfo.apis}}
             if (request.Classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}")
@@ -114,10 +115,15 @@ namespace {{packageName}}.Test
                 if (request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}")
                 {
                     {{#allParams}}
-                    if (parameter == "{{paramName}}")
+                    if (parameter == "{{baseName}}")
                     {
-                        request.Parameters.Set("{{paramName}}", Converter.ConvertTo<{{{dataType}}}>(value));
+                        {{^isFile}}
+                        request.Parameters.Set("{{baseName}}", Converter.ConvertTo<{{{dataType}}}>(value));
                         return;
+                        {{/isFile}}
+                        {{#isFile}}
+                        throw new InvalidOperationException($"The file parameter {{baseName}} cannot be set to a constant value");
+                        {{/isFile}}
                     }
                     {{^-last}}
 
@@ -136,7 +142,7 @@ namespace {{packageName}}.Test
         }
 
         [Given("the {string} parameter has a JSON value of:")]
-        public void GiveTheParameterAJsonValueOf(string parameter, string value)
+        public void GivenTheParameterAJsonValueOf(string parameter, string value)
         {
             {{#apiInfo.apis}}
             if (request.Classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}")
@@ -146,10 +152,15 @@ namespace {{packageName}}.Test
                 if (request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}")
                 {
                     {{#allParams}}
-                    if (parameter == "{{paramName}}")
+                    if (parameter == "{{baseName}}")
                     {
-                        request.Parameters.Set("{{paramName}}", JsonConvert.DeserializeObject<{{{dataType}}}>(value));
+                        {{^isFile}}
+                        request.Parameters.Set("{{baseName}}", JsonConvert.DeserializeObject<{{{dataType}}}>(value));
                         return;
+                        {{/isFile}}
+                        {{#isFile}}
+                        throw new InvalidOperationException($"The file parameter {{baseName}} cannot be set to a constant value");
+                        {{/isFile}}
                     }
                     {{^-last}}
 
@@ -168,7 +179,7 @@ namespace {{packageName}}.Test
         }
 
         [Given("the {string} parameter has the following values:")]
-        public void GiveTheParameterTheFollowingValues(string parameter, DataTable table)
+        public void GivenTheParameterTheFollowingValues(string parameter, DataTable table)
         {
             {{#apiInfo.apis}}
             if (request.Classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}")
@@ -178,7 +189,7 @@ namespace {{packageName}}.Test
                 if (request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}")
                 {
                     {{#allParams}}
-                    if (parameter == "{{paramName}}")
+                    if (parameter == "{{baseName}}")
                     {
                         {{#isContainer}}
                         {{{dataType}}} collection = new();
@@ -188,11 +199,11 @@ namespace {{packageName}}.Test
                             collection.Add(Converter.ConvertTo<{{{baseType}}}>(value));
                         }
 
-                        request.Parameters.Set("{{paramName}}", collection);
+                        request.Parameters.Set("{{baseName}}", collection);
                         return;
                         {{/isContainer}}
                         {{^isContainer}}
-                        throw new InvalidOperationException("Cannot read a DataTable into parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}} as it is not an array");
+                        throw new InvalidOperationException("Cannot read a DataTable into parameter {{#lambda.camelcase}}{{baseName}}{{/lambda.camelcase}} as it is not an array");
                         {{/isContainer}}
                     }
                     {{^-last}}
@@ -211,8 +222,45 @@ namespace {{packageName}}.Test
             throw new InvalidOperationException($"{request.Classname}.{request.OperationId} does not have a parameter called {parameter}");
         }
 
+        [Given("the {string} parameter is the file {string}")]
+        public async Task GivenTheParameterIsTheFile(string parameter, string file)
+        {
+            {{#apiInfo.apis}}
+            if (request.Classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}")
+            {
+                {{#operations}}
+                {{#operation}}
+                if (request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}")
+                {
+                    {{#allParams}}
+                    if (parameter == "{{baseName}}")
+                    {
+                        {{#isFile}}
+                        request.Parameters.Set("{{baseName}}", new MemoryStream(await File.ReadAllBytesAsync(file)));
+                        return;
+                        {{/isFile}}
+                        {{^isFile}}
+                        throw new InvalidOperationException("The parameter {{baseName}} is not a file");
+                        {{/isFile}}
+                    }
+                    {{^-last}}
+
+                    {{/-last}}
+                    {{/allParams}}
+                }
+                {{^-last}}
+
+                {{/-last}}
+                {{/operation}}
+                {{/operations}}
+            }
+
+            {{/apiInfo.apis}}
+            throw new InvalidOperationException($"{request.Classname}.{request.OperationId} does not have a parameter called {parameter}");
+        }
+
         [When("the request is sent")]
-        public async Task SendTheRequest()
+        public async Task WhenTheRequestIsSent()
         {
             {{#apiInfo.apis}}
             if (request.Classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}")
@@ -223,7 +271,7 @@ namespace {{packageName}}.Test
                 {{#operation}}
                 if (request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}")
                 {
-                    response = await api.{{operationId}}WithHttpInfoAsync({{#allParams}}request.Parameters.GetOrDefault<{{{dataType}}}>("{{paramName}}"){{^-last}}, {{/-last}}{{/allParams}});
+                    response = await api.{{operationId}}WithHttpInfoAsync({{#allParams}}request.Parameters.GetOrDefault<{{{dataType}}}>("{{baseName}}"){{^-last}}, {{/-last}}{{/allParams}});
                 }
                 {{^-last}}
 
@@ -235,13 +283,13 @@ namespace {{packageName}}.Test
         }
 
         [Then("the response status should be {int}")]
-        public void TheResponseStatusIs(int statusCode)
+        public void ThenTheResponseStatusIs(int statusCode)
         {
             response.StatusCode.ShouldBe((HttpStatusCode)statusCode);
         }
 
         [Then("the response content should be:")]
-        public void TheResponseContentShouldBe(string content)
+        public void ThenTheResponseContentShouldBe(string content)
         {
             MediaTypeHeaderValue? mediaType = null;
             if(response.Headers.TryGetValue("Content-Type", out var contentTypeValues) && contentTypeValues.Count > 0)

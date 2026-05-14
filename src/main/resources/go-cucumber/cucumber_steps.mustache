@@ -36,6 +36,16 @@ type request struct {
 	Parameters map[string]any
 }
 
+func (r *request) close() {
+    for _, val := range r.Parameters {
+        fd, ok := val.(*os.File)
+
+        if ok {
+            fd.Close()
+        }
+    }
+}
+
 type feature struct {
 	APIClient *{{goImportAlias}}.APIClient
 	Request   *request
@@ -43,7 +53,11 @@ type feature struct {
     Context   context.Context
 }
 
-func (f *feature) createARequestForTheApi(ctx context.Context, operationId string, classname string) (context.Context, error) {
+func (f *feature) givenThereIsARequestForTheApi(ctx context.Context, operationId string, classname string) (context.Context, error) {
+    if f.Request != nil {
+        f.Request.close()
+    }
+
 	f.Request = &request {
         Classname: classname,
 		OperationId: operationId,
@@ -53,22 +67,27 @@ func (f *feature) createARequestForTheApi(ctx context.Context, operationId strin
     return ctx, nil
 }
 
-func (f *feature) giveTheParameterAValueOf(ctx context.Context, param string, val string) (context.Context, error) {
+func (f *feature) givenTheParameterHasAValueOf(ctx context.Context, param string, val string) (context.Context, error) {
     {{#apiInfo.apis}}
     if f.Request.Classname == "{{#lambda.pascalcase}}{{#lambda.snakecase}}{{classname}}{{/lambda.snakecase}}{{/lambda.pascalcase}}" {
         {{#operations}}
         {{#operation}}
         if f.Request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}" {
             {{#allParams}}
-            if param == "{{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}}" {
+            {{^isFile}}
+            if param == "{{baseName}}" {
                 conv, err := convertTo[{{#isModel}}{{goImportAlias}}.{{/isModel}}{{{dataType}}}](val)
                 if err != nil {
                     return ctx, err
                 }
 
-                f.Request.Parameters["{{paramName}}"] = conv
+                f.Request.Parameters["{{baseName}}"] = conv
 	            return ctx, nil
             }
+            {{/isFile}}
+            {{#isFile}}
+            return ctx, fmt.Errorf("The file parameter %s cannot be set to a constant value", param)
+            {{/isFile}}
             {{^-last}}
 
             {{/-last}}
@@ -85,23 +104,28 @@ func (f *feature) giveTheParameterAValueOf(ctx context.Context, param string, va
     return ctx, fmt.Errorf("%s.%s does not have a parameter called %s", f.Request.Classname, f.Request.OperationId, param)
 }
 
-func (f *feature) giveTheParameterAJsonValueOf(ctx context.Context, param string, val string) (context.Context, error) {
+func (f *feature) givenTheParameterHasAJsonValueOf(ctx context.Context, param string, val string) (context.Context, error) {
     {{#apiInfo.apis}}
     if f.Request.Classname == "{{#lambda.pascalcase}}{{#lambda.snakecase}}{{classname}}{{/lambda.snakecase}}{{/lambda.pascalcase}}" {
         {{#operations}}
         {{#operation}}
         if f.Request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}" {
             {{#allParams}}
-            if param == "{{paramName}}" {
+            {{^isFile}}
+            if param == "{{baseName}}" {
                 var obj {{#isModel}}{{goImportAlias}}.{{/isModel}}{{{dataType}}}
                 err := json.Unmarshal([]byte(val), &obj)
                 if err != nil {
                     return ctx, err
                 }
 
-                f.Request.Parameters["{{paramName}}"] = obj
+                f.Request.Parameters["{{baseName}}"] = obj
                 return ctx, nil
             }
+            {{/isFile}}
+            {{#isFile}}
+            return ctx, fmt.Errorf("The file parameter %s cannot be set to a constant value", param)
+            {{/isFile}}
             {{^-last}}
 
             {{/-last}}
@@ -118,14 +142,14 @@ func (f *feature) giveTheParameterAJsonValueOf(ctx context.Context, param string
     return ctx, fmt.Errorf("%s.%s does not have a parameter called %s", f.Request.Classname, f.Request.OperationId, param)
 }
 
-func (f *feature) giveTheParameterTheFollowingValues(ctx context.Context, param string, table *godog.Table) (context.Context, error) {
+func (f *feature) givenTheParameterHasTheFollowingValues(ctx context.Context, param string, table *godog.Table) (context.Context, error) {
     {{#apiInfo.apis}}
     if f.Request.Classname == "{{#lambda.pascalcase}}{{#lambda.snakecase}}{{classname}}{{/lambda.snakecase}}{{/lambda.pascalcase}}" {
         {{#operations}}
         {{#operation}}
         if f.Request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}" {
             {{#allParams}}
-            if param == "{{paramName}}" {
+            if param == "{{baseName}}" {
                 {{#isContainer}}
                 slice := []{{{baseType}}}{}
                 for _, row := range table.Rows {
@@ -137,11 +161,11 @@ func (f *feature) giveTheParameterTheFollowingValues(ctx context.Context, param 
                     slice = append(slice, val)
                 }
 
-                f.Request.Parameters["{{paramName}}"] = slice
+                f.Request.Parameters["{{baseName}}"] = slice
                 return ctx, nil
                 {{/isContainer}}
                 {{^isContainer}}
-                return ctx, fmt.Errorf("cannot read a Table into parameter {{#lambda.camelcase}}{{paramName}}{{/lambda.camelcase}} as it is not an array")
+                return ctx, fmt.Errorf("cannot read a Table into parameter {{baseName}} as it is not an array")
                 {{/isContainer}}
             }
             {{^-last}}
@@ -160,7 +184,45 @@ func (f *feature) giveTheParameterTheFollowingValues(ctx context.Context, param 
     return ctx, fmt.Errorf("%s.%s does not have a parameter called %s", f.Request.Classname, f.Request.OperationId, param)
 }
 
-func (f *feature) sendTheRequest(ctx context.Context) (context.Context, error) {
+func (f *feature) givenTheParameterIsTheFile(ctx context.Context, param string, file string) (context.Context, error) {
+    {{#apiInfo.apis}}
+    if f.Request.Classname == "{{#lambda.pascalcase}}{{#lambda.snakecase}}{{classname}}{{/lambda.snakecase}}{{/lambda.pascalcase}}" {
+        {{#operations}}
+        {{#operation}}
+        if f.Request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}" {
+            {{#allParams}}
+
+            if param == "{{baseName}}" {
+                {{#isFile}}
+                fd, err := os.Open(file)
+                if err != nil {
+                    return ctx, err
+                }
+
+                f.Request.Parameters[param] = fd
+                return ctx, nil
+                {{/isFile}}
+                {{^isFile}}
+                return ctx, fmt.Errorf("Parameter '%s' is not a file", param)
+                {{/isFile}}
+            }
+            {{^-last}}
+
+            {{/-last}}
+            {{/allParams}}
+        }
+        {{^-last}}
+
+        {{/-last}}
+        {{/operation}}
+        {{/operations}}
+    }
+
+    {{/apiInfo.apis}}
+    return ctx, fmt.Errorf("%s.%s does not have a parameter called %s", f.Request.Classname, f.Request.OperationId, param)
+}
+
+func (f *feature) whenTheRequestIsSent(ctx context.Context) (context.Context, error) {
     {{#apiInfo.apis}}
     if f.Request.Classname == "{{#lambda.pascalcase}}{{#lambda.snakecase}}{{classname}}{{/lambda.snakecase}}{{/lambda.pascalcase}}" {
         {{#operations}}
@@ -173,10 +235,10 @@ func (f *feature) sendTheRequest(ctx context.Context) (context.Context, error) {
             {{/-last}}
             {{/pathParams}}
             {{#pathParams}}
-            if val, ok := f.Request.Parameters["{{paramName}}"]; ok {
+            if val, ok := f.Request.Parameters["{{baseName}}"]; ok {
                 {{paramName}}Param = val
             } else {
-                return ctx, fmt.Errorf("parameter \"{{paramName}}\" is required")
+                return ctx, fmt.Errorf("parameter \"{{baseName}}\" is required")
             }
 
             {{/pathParams}}
@@ -184,7 +246,7 @@ func (f *feature) sendTheRequest(ctx context.Context) (context.Context, error) {
             
             {{#allParams}}
             {{^isPathParam}}
-            if val, ok := f.Request.Parameters["{{paramName}}"]; ok {
+            if val, ok := f.Request.Parameters["{{baseName}}"]; ok {
                 request = request.{{#lambda.pascalcase}}{{paramName}}{{/lambda.pascalcase}}(safeCast[{{#isModel}}{{goImportAlias}}.{{/isModel}}{{{dataType}}}](val))
             }
 
@@ -209,7 +271,7 @@ func (f *feature) sendTheRequest(ctx context.Context) (context.Context, error) {
     return ctx, nil
 }
 
-func (f *feature) theResponseStatusShouldBe(ctx context.Context, statusCode string) (context.Context, error) {
+func (f *feature) thenTheResponseStatusShouldBe(ctx context.Context, statusCode string) (context.Context, error) {
 	sc, err := strconv.ParseInt(statusCode, 10, 32)
 	if err != nil {
 		return ctx, err
@@ -222,7 +284,7 @@ func (f *feature) theResponseStatusShouldBe(ctx context.Context, statusCode stri
     return ctx, nil
 }
 
-func (f *feature) theResponseContentShouldBe(ctx context.Context, content string) (context.Context, error) {
+func (f *feature) thenTheResponseContentShouldBe(ctx context.Context, content string) (context.Context, error) {
     mediaType, _, err := mime.ParseMediaType(strings.ToLower(f.Response.Header.Get("Content-Type")))
     if err != nil {
         return ctx, fmt.Errorf("failed to parse media type: %v", err)
@@ -377,13 +439,14 @@ func InitializeScenario(t *testing.T) func(*godog.ScenarioContext) {
             Context: ctx,
         }
 
-        sc.Given(`^there is a "([^"]*)" request for the "([^"]*)"$`, feat.createARequestForTheApi)
-        sc.Given(`^there is an "([^"]*)" request for the "([^"]*)"$`, feat.createARequestForTheApi)
-        sc.Given(`^the "([^"]*)" parameter has a value of "([^"]*)"$`, feat.giveTheParameterAValueOf)
-        sc.Given(`^the "([^"]*)" parameter has a JSON value of:$`, feat.giveTheParameterAJsonValueOf)
-        sc.Given(`^the "([^"]*)" parameter has the following values:$`, feat.giveTheParameterTheFollowingValues)
-        sc.When(`^the request is sent$`, feat.sendTheRequest)
-        sc.Then(`^the response status should be (\d+)$`, feat.theResponseStatusShouldBe)
-        sc.Then(`^the response content should be:$`, feat.theResponseContentShouldBe)
+        sc.Given(`^there is a "([^"]*)" request for the "([^"]*)"$`, feat.givenThereIsARequestForTheApi)
+        sc.Given(`^there is an "([^"]*)" request for the "([^"]*)"$`, feat.givenThereIsARequestForTheApi)
+        sc.Given(`^the "([^"]*)" parameter has a value of "([^"]*)"$`, feat.givenTheParameterHasAValueOf)
+        sc.Given(`^the "([^"]*)" parameter has a JSON value of:$`, feat.givenTheParameterHasAJsonValueOf)
+        sc.Given(`^the "([^"]*)" parameter has the following values:$`, feat.givenTheParameterHasTheFollowingValues)
+        sc.Given(`^the "([^"]*)" parameter is the file "([^"]*)"$`, feat.givenTheParameterIsTheFile)
+        sc.When(`^the request is sent$`, feat.whenTheRequestIsSent)
+        sc.Then(`^the response status should be (\d+)$`, feat.thenTheResponseStatusShouldBe)
+        sc.Then(`^the response content should be:$`, feat.thenTheResponseContentShouldBe)
     }
 }
