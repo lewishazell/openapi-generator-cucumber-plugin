@@ -76,7 +76,7 @@ func (f *feature) givenTheParameterHasAValueOf(ctx context.Context, param string
             {{#allParams}}
             {{^isFile}}
             if param == "{{baseName}}" {
-                conv, err := convertTo[{{#isModel}}{{goImportAlias}}.{{/isModel}}{{{dataType}}}](val)
+                conv, err := convertTo[{{#isModel}}{{goImportAlias}}.{{/isModel}}{{^isModel}}{{#isEnumRef}}{{goImportAlias}}.{{/isEnumRef}}{{/isModel}}{{{dataType}}}](val)
                 if err != nil {
                     return ctx, err
                 }
@@ -86,7 +86,9 @@ func (f *feature) givenTheParameterHasAValueOf(ctx context.Context, param string
             }
             {{/isFile}}
             {{#isFile}}
-            return ctx, fmt.Errorf("The file parameter %s cannot be set to a constant value", param)
+            if param == "{{baseName}}" {
+                return ctx, fmt.Errorf("The file parameter %s cannot be set to a constant value", param)
+            }
             {{/isFile}}
             {{^-last}}
 
@@ -113,7 +115,7 @@ func (f *feature) givenTheParameterHasAJsonValueOf(ctx context.Context, param st
             {{#allParams}}
             {{^isFile}}
             if param == "{{baseName}}" {
-                var obj {{#isModel}}{{goImportAlias}}.{{/isModel}}{{{dataType}}}
+                var obj {{#isModel}}{{goImportAlias}}.{{/isModel}}{{^isModel}}{{#isEnumRef}}{{goImportAlias}}.{{/isEnumRef}}{{/isModel}}{{{dataType}}}
                 err := json.Unmarshal([]byte(val), &obj)
                 if err != nil {
                     return ctx, err
@@ -124,7 +126,9 @@ func (f *feature) givenTheParameterHasAJsonValueOf(ctx context.Context, param st
             }
             {{/isFile}}
             {{#isFile}}
-            return ctx, fmt.Errorf("The file parameter %s cannot be set to a constant value", param)
+            if param == "{{baseName}}" {
+                return ctx, fmt.Errorf("The file parameter %s cannot be set to a constant value", param)
+            }
             {{/isFile}}
             {{^-last}}
 
@@ -242,12 +246,12 @@ func (f *feature) whenTheRequestIsSent(ctx context.Context) (context.Context, er
             }
 
             {{/pathParams}}
-            request := f.APIClient.{{classname}}.{{operationId}}(f.Context{{#pathParams}}, safeCast[{{#isModel}}{{goImportAlias}}.{{/isModel}}{{{dataType}}}]({{paramName}}Param){{/pathParams}})
+            request := f.APIClient.{{classname}}.{{operationId}}(f.Context{{#pathParams}}, safeCast[{{#isModel}}{{goImportAlias}}.{{/isModel}}{{^isModel}}{{#isEnumRef}}{{goImportAlias}}.{{/isEnumRef}}{{/isModel}}{{{dataType}}}]({{paramName}}Param){{/pathParams}})
             
             {{#allParams}}
             {{^isPathParam}}
             if val, ok := f.Request.Parameters["{{baseName}}"]; ok {
-                request = request.{{#lambda.pascalcase}}{{paramName}}{{/lambda.pascalcase}}(safeCast[{{#isModel}}{{goImportAlias}}.{{/isModel}}{{{dataType}}}](val))
+                request = request.{{#lambda.pascalcase}}{{paramName}}{{/lambda.pascalcase}}(safeCast[{{#isModel}}{{goImportAlias}}.{{/isModel}}{{^isModel}}{{#isEnumRef}}{{goImportAlias}}.{{/isEnumRef}}{{/isModel}}{{{dataType}}}](val))
             }
 
             {{/isPathParam}}

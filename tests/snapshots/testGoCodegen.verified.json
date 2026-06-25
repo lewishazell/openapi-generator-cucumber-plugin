@@ -20,7 +20,7 @@
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "line": 7,
             "match": {
-              "location": "godogs_test.go:588"
+              "location": "godogs_test.go:592"
             },
             "result": {
               "status": "passed"
@@ -31,7 +31,7 @@
             "name": "the \"id\" parameter has a value of \"1\"",
             "line": 8,
             "match": {
-              "location": "godogs_test.go:590"
+              "location": "godogs_test.go:594"
             },
             "result": {
               "status": "passed"
@@ -42,7 +42,7 @@
             "name": "the request is sent",
             "line": 9,
             "match": {
-              "location": "godogs_test.go:594"
+              "location": "godogs_test.go:598"
             },
             "result": {
               "status": "passed"
@@ -53,7 +53,7 @@
             "name": "the response status should be 200",
             "line": 10,
             "match": {
-              "location": "godogs_test.go:595"
+              "location": "godogs_test.go:599"
             },
             "result": {
               "status": "passed"
@@ -69,7 +69,7 @@
               "line": 12
             },
             "match": {
-              "location": "godogs_test.go:596"
+              "location": "godogs_test.go:600"
             },
             "result": {
               "status": "passed"
@@ -90,7 +90,7 @@
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "line": 19,
             "match": {
-              "location": "godogs_test.go:588"
+              "location": "godogs_test.go:592"
             },
             "result": {
               "status": "passed"
@@ -101,7 +101,7 @@
             "name": "the \"id\" parameter has a value of \"1\"",
             "line": 20,
             "match": {
-              "location": "godogs_test.go:590"
+              "location": "godogs_test.go:594"
             },
             "result": {
               "status": "passed"
@@ -112,7 +112,7 @@
             "name": "the request is sent",
             "line": 21,
             "match": {
-              "location": "godogs_test.go:594"
+              "location": "godogs_test.go:598"
             },
             "result": {
               "status": "passed"
@@ -123,7 +123,7 @@
             "name": "the response status should be 201",
             "line": 22,
             "match": {
-              "location": "godogs_test.go:595"
+              "location": "godogs_test.go:599"
             },
             "result": {
               "status": "failed"
@@ -139,7 +139,7 @@
               "line": 24
             },
             "match": {
-              "location": "godogs_test.go:596"
+              "location": "godogs_test.go:600"
             },
             "result": {
               "status": "skipped"
@@ -160,7 +160,7 @@
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "line": 31,
             "match": {
-              "location": "godogs_test.go:588"
+              "location": "godogs_test.go:592"
             },
             "result": {
               "status": "passed"
@@ -171,7 +171,7 @@
             "name": "the \"id\" parameter has a value of \"1\"",
             "line": 32,
             "match": {
-              "location": "godogs_test.go:590"
+              "location": "godogs_test.go:594"
             },
             "result": {
               "status": "passed"
@@ -182,7 +182,7 @@
             "name": "the request is sent",
             "line": 33,
             "match": {
-              "location": "godogs_test.go:594"
+              "location": "godogs_test.go:598"
             },
             "result": {
               "status": "passed"
@@ -193,7 +193,7 @@
             "name": "the response status should be 200",
             "line": 34,
             "match": {
-              "location": "godogs_test.go:595"
+              "location": "godogs_test.go:599"
             },
             "result": {
               "status": "passed"
@@ -209,7 +209,7 @@
               "line": 36
             },
             "match": {
-              "location": "godogs_test.go:596"
+              "location": "godogs_test.go:600"
             },
             "result": {
               "status": "failed"
@@ -230,7 +230,7 @@
             "name": "there is a \"deletePet\" request for the \"DefaultApi\"",
             "line": 43,
             "match": {
-              "location": "godogs_test.go:588"
+              "location": "godogs_test.go:592"
             },
             "result": {
               "status": "passed"
@@ -241,7 +241,7 @@
             "name": "the \"id\" parameter has a value of \"1\"",
             "line": 44,
             "match": {
-              "location": "godogs_test.go:590"
+              "location": "godogs_test.go:594"
             },
             "result": {
               "status": "passed"
@@ -252,7 +252,7 @@
             "name": "the request is sent",
             "line": 45,
             "match": {
-              "location": "godogs_test.go:594"
+              "location": "godogs_test.go:598"
             },
             "result": {
               "status": "passed"
@@ -263,7 +263,7 @@
             "name": "the response status should be 204",
             "line": 46,
             "match": {
-              "location": "godogs_test.go:595"
+              "location": "godogs_test.go:599"
             },
             "result": {
               "status": "passed"
@@ -284,7 +284,7 @@
             "name": "there is a \"findPets\" request for the \"DefaultApi\"",
             "line": 51,
             "match": {
-              "location": "godogs_test.go:588"
+              "location": "godogs_test.go:592"
             },
             "result": {
               "status": "passed"
@@ -295,7 +295,7 @@
             "name": "the \"tags\" parameter has the following values:",
             "line": 52,
             "match": {
-              "location": "godogs_test.go:592"
+              "location": "godogs_test.go:596"
             },
             "result": {
               "status": "passed"
@@ -328,7 +328,7 @@
             "name": "the \"limit\" parameter has a value of \"2\"",
             "line": 57,
             "match": {
-              "location": "godogs_test.go:590"
+              "location": "godogs_test.go:594"
             },
             "result": {
               "status": "passed"
@@ -339,7 +339,7 @@
             "name": "the request is sent",
             "line": 58,
             "match": {
-              "location": "godogs_test.go:594"
+              "location": "godogs_test.go:598"
             },
             "result": {
               "status": "passed"
@@ -350,7 +350,7 @@
             "name": "the response status should be 200",
             "line": 59,
             "match": {
-              "location": "godogs_test.go:595"
+              "location": "godogs_test.go:599"
             },
             "result": {
               "status": "passed"
@@ -366,7 +366,7 @@
               "line": 61
             },
             "match": {
-              "location": "godogs_test.go:596"
+              "location": "godogs_test.go:600"
             },
             "result": {
               "status": "passed"
@@ -387,7 +387,7 @@
             "name": "there is a \"findPets\" request for the \"DefaultApi\"",
             "line": 68,
             "match": {
-              "location": "godogs_test.go:588"
+              "location": "godogs_test.go:592"
             },
             "result": {
               "status": "passed"
@@ -398,7 +398,7 @@
             "name": "the \"tags\" parameter has the following values:",
             "line": 69,
             "match": {
-              "location": "godogs_test.go:592"
+              "location": "godogs_test.go:596"
             },
             "result": {
               "status": "passed"
@@ -431,7 +431,7 @@
             "name": "the request is sent",
             "line": 74,
             "match": {
-              "location": "godogs_test.go:594"
+              "location": "godogs_test.go:598"
             },
             "result": {
               "status": "passed"
@@ -442,7 +442,7 @@
             "name": "the response status should be 200",
             "line": 75,
             "match": {
-              "location": "godogs_test.go:595"
+              "location": "godogs_test.go:599"
             },
             "result": {
               "status": "passed"
@@ -463,7 +463,7 @@
             "name": "there is an \"addPet\" request for the \"DefaultApi\"",
             "line": 80,
             "match": {
-              "location": "godogs_test.go:589"
+              "location": "godogs_test.go:593"
             },
             "result": {
               "status": "passed"
@@ -479,7 +479,7 @@
               "line": 82
             },
             "match": {
-              "location": "godogs_test.go:591"
+              "location": "godogs_test.go:595"
             },
             "result": {
               "status": "passed"
@@ -490,7 +490,7 @@
             "name": "the request is sent",
             "line": 85,
             "match": {
-              "location": "godogs_test.go:594"
+              "location": "godogs_test.go:598"
             },
             "result": {
               "status": "passed"
@@ -501,7 +501,7 @@
             "name": "the response status should be 200",
             "line": 86,
             "match": {
-              "location": "godogs_test.go:595"
+              "location": "godogs_test.go:599"
             },
             "result": {
               "status": "passed"
@@ -522,7 +522,7 @@
             "name": "there is an \"addPetPhotoById\" request for the \"DefaultApi\"",
             "line": 91,
             "match": {
-              "location": "godogs_test.go:589"
+              "location": "godogs_test.go:593"
             },
             "result": {
               "status": "passed"
@@ -533,7 +533,7 @@
             "name": "the \"id\" parameter has a value of \"1\"",
             "line": 92,
             "match": {
-              "location": "godogs_test.go:590"
+              "location": "godogs_test.go:594"
             },
             "result": {
               "status": "passed"
@@ -544,7 +544,7 @@
             "name": "the \"file\" parameter is the file \"photo.jpg\"",
             "line": 93,
             "match": {
-              "location": "godogs_test.go:593"
+              "location": "godogs_test.go:597"
             },
             "result": {
               "status": "passed"
@@ -555,7 +555,7 @@
             "name": "the request is sent",
             "line": 94,
             "match": {
-              "location": "godogs_test.go:594"
+              "location": "godogs_test.go:598"
             },
             "result": {
               "status": "passed"
@@ -566,7 +566,7 @@
             "name": "the response status should be 201",
             "line": 95,
             "match": {
-              "location": "godogs_test.go:595"
+              "location": "godogs_test.go:599"
             },
             "result": {
               "status": "passed"
