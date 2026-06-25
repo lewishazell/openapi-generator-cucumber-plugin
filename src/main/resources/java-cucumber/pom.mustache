@@ -288,6 +288,13 @@
             <version>${jackson-version}</version>
         </dependency>
         {{/useJakartaEe}}
+        {{#openApiNullable}}
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+        {{/openApiNullable}}
         {{#withXml}}
 
         <!-- XML processing: Jackson -->
