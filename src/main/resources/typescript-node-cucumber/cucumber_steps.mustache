@@ -13,6 +13,7 @@ import * as http from 'http';
 import * as assert from 'assert';
 import { Before, Given, When, Then, DataTable } from '@cucumber/cucumber';
 import * as contentType from 'content-type';
+import { ObjectSerializer } from '../../model/models';
 
 class TestContext {
     public request: Request | undefined;
@@ -110,7 +111,7 @@ Given('the {string} parameter has a JSON value of:', function(parameter: string,
             {{#allParams}}
             if (parameter == "{{baseName}}") {
                 {{^isFile}}
-                ctx.request.parameters[parameter] = JSON.parse(value);
+                ctx.request.parameters[parameter] = ObjectSerializer.deserialize(JSON.parse(value), "{{dataType}}");
                 return;
                 {{/isFile}}
                 {{#isFile}}
