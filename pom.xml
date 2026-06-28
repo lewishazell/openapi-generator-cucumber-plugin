@@ -191,7 +191,7 @@
         </dependency>
     </dependencies>
     <properties>
-        <revision>${revision}</revision>
+        <revision>1.0.0-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <openapi-generator-version>7.11.0</openapi-generator-version>
         <maven-plugin-version>1.0.0</maven-plugin-version>
