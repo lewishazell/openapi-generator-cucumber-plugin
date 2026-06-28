@@ -18,6 +18,8 @@ using Shouldly;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
+using Json.Path;
 
 using {{packageName}}.Model;
 using {{packageName}}.Client;
@@ -41,6 +43,7 @@ namespace {{packageName}}.Test
         private Request request;
         private IApiResponse response;
         private Configuration configuration;
+        private IApiResponse previousResponse;
 
         public StepDefinitions()
         {
@@ -50,6 +53,7 @@ namespace {{packageName}}.Test
             var securityScheme = Environment.GetEnvironmentVariable("cucumber_security_scheme")?.Trim();
             var apiKey = Environment.GetEnvironmentVariable("cucumber_api_key")?.Trim();
             var apiKeyPrefix = Environment.GetEnvironmentVariable("cucumber_api_key_prefix")?.Trim();
+            previousResponse = null;
 
             if (string.IsNullOrWhiteSpace(targetHost))
             {
@@ -259,6 +263,47 @@ namespace {{packageName}}.Test
             throw new InvalidOperationException($"{request.Classname}.{request.OperationId} does not have a parameter called {parameter}");
         }
 
+        [Given("the {string} parameter is {string} from the previous response")]
+        public void GivenTheParameterIsFromPreviousResponse(string parameter, string jsonPath)
+        {
+            if (previousResponse == null)
+            {
+                throw new InvalidOperationException("No previous response exists.");
+            }
+
+            if (!previousResponse.Headers.TryGetValue("Content-Type", out var contentTypeValues) || !contentTypeValues.Any(ct => ct.Contains("application/json")))
+            {
+                throw new InvalidOperationException("Previous response is not JSON.");
+            }
+
+            var json = JsonNode.Parse(previousResponse.RawContent);
+            var path = JsonPath.Parse(jsonPath);
+            var result = path.Evaluate(json);
+
+            if (result == null || !result.Matches.Any())
+            {
+                throw new InvalidOperationException($"No value found for JSON Path: {jsonPath}");
+            }
+
+            var value = result.Matches[0].Value;
+            if (value is JsonValue jsonValue && jsonValue.TryGetValue(out int intValue))
+            {
+                request.Parameters.Set(parameter, (long)intValue);
+            }
+            else if (value is JsonValue jsonValueLong && jsonValueLong.TryGetValue(out long longValue))
+            {
+                request.Parameters.Set(parameter, longValue);
+            }
+            else if (value is JsonValue jsonValueString && jsonValueString.TryGetValue(out string stringValue))
+            {
+                request.Parameters.Set(parameter, stringValue);
+            }
+            else
+            {
+                request.Parameters.Set(parameter, value.ToString());
+            }
+        }
+
         [When("the request is sent")]
         public async Task WhenTheRequestIsSent()
         {
@@ -272,6 +317,7 @@ namespace {{packageName}}.Test
                 if (request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}")
                 {
                     response = await api.{{operationId}}WithHttpInfoAsync({{#allParams}}request.Parameters.GetOrDefault<{{{dataType}}}>("{{baseName}}"){{^-last}}, {{/-last}}{{/allParams}});
+                    previousResponse = response;
                 }
                 {{^-last}}
 
@@ -346,7 +392,13 @@ namespace {{packageName}}.Test
             }
         }
 
-         [Then("the response content should contain the subtree:")]
+         [AfterScenario]
+        public void AfterScenario()
+        {
+            previousResponse = null;
+        }
+
+        [Then("the response content should contain the subtree:")]
         public void ThenTheResponseShouldContainTheJsonSubtree(string content)
         {
             MediaTypeHeaderValue? mediaType = null;

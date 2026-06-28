@@ -11,13 +11,15 @@ export * from './{{ classFilename }}Interface'
 {{/apiInfo}}
 import * as http from 'http';
 import * as assert from 'assert';
-import { Before, Given, When, Then, DataTable } from '@cucumber/cucumber';
+import { Before, Given, When, Then, DataTable, After } from '@cucumber/cucumber';
 import * as contentType from 'content-type';
 import { ObjectSerializer } from '../../model/models';
+import { JSONPath } from 'jsonpath-plus';
 
 class TestContext {
     public request: Request | undefined;
     public response: { message: http.IncomingMessage, body: any } | undefined;
+    public previousResponse: { message: http.IncomingMessage, body: any } | undefined;
     public targetHost: string | undefined;
     public accessToken: string | undefined;
     public securityScheme: string | undefined;
@@ -35,6 +37,7 @@ Before(function() {
     ctx.securityScheme = process.env.cucumber_security_scheme?.trim();
     ctx.apiKey = process.env.cucumber_api_key?.trim();
     ctx.apiKeyPrefix = process.env.cucumber_api_key_prefix?.trim();
+    ctx.previousResponse = undefined;
 
     if (!ctx.targetHost) {
         ctx.targetHost = defaultHost;
@@ -206,6 +209,24 @@ Given('the {string} parameter is the file {string}', function(parameter: string,
     throw new Error(`${ctx.request?.classname}.${ctx.request?.operationId} does not have a parameter called ${parameter}`);
 });
 
+Given('the {string} parameter is {string} from the previous response', function(parameter: string, jsonPath: string) {
+    if (!ctx.previousResponse) {
+        throw new Error('No previous response exists.');
+    }
+    if (!ctx.previousResponse.message.headers['content-type']?.includes('application/json')) {
+        throw new Error('Previous response is not JSON.');
+    }
+    const value = JSONPath({ path: jsonPath, json: ctx.previousResponse.body });
+    if (!value || (Array.isArray(value) && value.length === 0)) {
+        throw new Error(`No value found for JSON Path: ${jsonPath}`);
+    }
+    if (!ctx.request) {
+        throw new Error('Request is not initialized');
+    }
+    // JSONPath can return a single value or an array of values
+    ctx.request.parameters[parameter] = Array.isArray(value) ? value[0] : value;
+});
+
 When('the request is sent', async function() {
     {{#apiInfo.apis}}
     if (ctx.request?.classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}") {
@@ -237,6 +258,7 @@ When('the request is sent', async function() {
         if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
             let { response, body } = await api.{{operationId}}({{#allParams}}ctx.request.parameters["{{baseName}}"]{{^-last}}, {{/-last}}{{/allParams}});
             ctx.response = { message: response, body };
+            ctx.previousResponse = { message: response, body };
 
             return;
         }
@@ -263,6 +285,10 @@ Then('the response content should be:', function(content: string) {
     } else {
         throw new Error("Cannot assert against unsupported content type: " + type);
     }
+});
+
+After(function() {
+    ctx.previousResponse = undefined;
 });
 
 Then('the response content should contain the subtree:', function(content: string) {

@@ -10,6 +10,7 @@ import pytest
 import {{packageName}}
 from typing import TypeVar, List
 from pytest_bdd import scenarios, given, when, then, parsers
+from jsonpath_ng import parse
 
 {{#apiInfo.apis}}
 from {{apiPackage}}.{{classFilename}} import {{classname}}
@@ -24,6 +25,32 @@ def test_context():
     security_scheme = os.getenv("cucumber_security_scheme")
     api_key = os.getenv("cucumber_api_key")
     api_key_prefix = os.getenv("cucumber_api_key_prefix")
+    
+    target_host = target_host.strip() if target_host is not None else None
+    access_token = access_token.strip() if access_token is not None else None
+    security_scheme = security_scheme.strip() if security_scheme is not None else None
+    api_key = api_key.strip() if api_key is not None else None
+    api_key_prefix = api_key_prefix.strip() if api_key_prefix is not None else None
+
+    if not target_host:
+        raise ValueError("TARGET_HOST is not set or still set to the default placeholder. Please set the cucumber_target_host environment variable or pass -p cucumberTargetHost=... during generation.")
+
+    configuration = {{packageName}}.Configuration(host=target_host)
+
+    if access_token:
+        {{#hasHttpBearerMethods}}
+        configuration.access_token = access_token
+        {{/hasHttpBearerMethods}}
+        {{^hasHttpBearerMethods}}
+        pass
+        {{/hasHttpBearerMethods}}
+    
+    return {
+        "api_client": {{packageName}}.ApiClient(configuration),
+        "request": None,
+        "response": None,
+        "previous_response": None
+    }
 
     target_host = target_host.strip() if target_host is not None else None
     access_token = access_token.strip() if access_token is not None else None
@@ -191,6 +218,36 @@ def given_the_parameter_is_the_file(test_context, parameter, file):
 
     raise ValueError(f"{request.classname}.{request.operation_id} does not have a parameter called {parameter}")
 
+@given(parsers.parse('the "{parameter}" parameter is "{jsonPath}" from the previous response'))
+def given_the_parameter_is_from_previous_response(test_context, parameter, jsonPath):
+    if not test_context.get("previous_response"):
+        raise ValueError('No previous response exists.')
+    
+    # Check if Content-Type header indicates JSON, or if no Content-Type header exists but response looks like JSON
+    content_type = ""
+    if test_context["previous_response"].headers is not None:
+        headers_lower = {k.lower(): v for k, v in test_context["previous_response"].headers.items()}
+        content_type = headers_lower.get("content-type", "").lower()
+    
+    if "application/json" not in content_type:
+        raise ValueError('Previous response is not JSON.')
+    
+    json_data = test_context["previous_response"].raw_data
+    if isinstance(json_data, bytes):
+        json_data = json_data.decode('utf-8')
+    
+    try:
+        parsed_json = json.loads(json_data)
+    except json.JSONDecodeError:
+        raise ValueError('Failed to parse previous response as JSON')
+    
+    match = parse(jsonPath).find(parsed_json)
+    
+    if not match:
+        raise ValueError(f'No value found for JSON Path: {jsonPath}')
+    
+    test_context["request"].parameters[parameter] = match[0].value
+
 @when('the request is sent')
 def when_the_request_is_sent(test_context):
     request = test_context["request"]
@@ -203,6 +260,7 @@ def when_the_request_is_sent(test_context):
         {{#operation}}
         if request.operation_id == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}":
             test_context["response"] = api.{{operationId}}_with_http_info({{#allParams}}request.parameters.get("{{baseName}}"){{^-last}}, {{/-last}}{{/allParams}})
+            test_context["previous_response"] = test_context["response"]
         {{/operation}}
         {{/operations}}
     {{/apiInfo.apis}}
@@ -258,6 +316,10 @@ class Request:
         self.classname = classname
         self.operation_id = operation_id
         self.parameters = {}
+
+@pytest.fixture(autouse=True)
+def clear_previous_response(test_context):
+    test_context["previous_response"] = None
 
 def convert_to(to_type: type[T], value: str) -> any:
     if to_type == str:

@@ -11,12 +11,15 @@ import {{invokerPackage}}.ApiResponse;
 {{#imports}}import {{import}};
 {{/imports}}
 import io.cucumber.junit.platform.engine.Cucumber;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.docstring.DocString;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -36,6 +39,7 @@ public class StepDefinitions {
     private static Gson gson = new Gson();
     private Request request;
     private ApiResponse<?> response;
+    private ApiResponse<?> previousResponse;
     private ApiClient apiClient = new ApiClient();;
 
     public StepDefinitions() {
@@ -45,6 +49,7 @@ public class StepDefinitions {
         String securityScheme = System.getenv("cucumber_security_scheme");
         String apiKey = System.getenv("cucumber_api_key");
         String apiKeyPrefix = System.getenv("cucumber_api_key_prefix");
+        previousResponse = null;
 
         if (targetHost == null || targetHost.trim().isEmpty()) {
             targetHost = defaultHost;
@@ -256,6 +261,39 @@ public class StepDefinitions {
         throw new IllegalArgumentException(request.getClassname() + "." + request.getOperationId() + " does not have a parameter called " + parameter);
     }
 
+    @Given("the {string} parameter is {string} from the previous response")
+    public void givenTheParameterIsFromPreviousResponse(String parameter, String jsonPath) {
+        if (previousResponse == null) {
+            throw new IllegalStateException("No previous response exists.");
+        }
+
+        String contentType = null;
+        if (previousResponse.getHeaders() != null) {
+            contentType = previousResponse.getHeaders().get("Content-Type").stream()
+                .findFirst()
+                .orElse("");
+        }
+
+        if (contentType == null || !contentType.startsWith("application/json")) {
+            throw new IllegalStateException("Previous response is not JSON.");
+        }
+
+        try {
+            // Convert response data to JSON string if it's not already parsed
+            String jsonData;
+            if (previousResponse.getData() instanceof String) {
+                jsonData = (String) previousResponse.getData();
+            } else {
+                jsonData = gson.toJson(previousResponse.getData());
+            }
+            
+            Object value = JsonPath.read(jsonData, jsonPath);
+            request.getParameters().put(parameter, value);
+        } catch (PathNotFoundException e) {
+            throw new IllegalStateException("No value found for JSON Path: " + jsonPath, e);
+        }
+    }
+
     @When("the request is sent")
     public void whenTheRequestIsSent() throws ApiException {
         {{#apiInfo.apis}}
@@ -266,6 +304,7 @@ public class StepDefinitions {
             {{#operation}}
             if ("{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}".equals(request.getOperationId())) {
                 response = api.{{operationId}}WithHttpInfo({{#allParams}}({{{dataType}}})request.getParameters().get("{{baseName}}"){{^-last}}, {{/-last}}{{/allParams}});
+                previousResponse = response;
             }
             {{^-last}}
 
@@ -330,6 +369,11 @@ public class StepDefinitions {
             return true;
         }
         return false;
+    }
+
+    @After
+    public void afterScenario() {
+        previousResponse = null;
     }
 
     @Then("the response content should contain the subtree:")

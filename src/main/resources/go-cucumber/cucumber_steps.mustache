@@ -12,6 +12,7 @@ Testing {{classname}}Service
 package {{packageName}}
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
     "flag"
@@ -28,6 +29,7 @@ import (
 
     "github.com/cucumber/godog"
 	{{goImportAlias}} "{{gitHost}}/{{gitUserId}}/{{gitRepoId}}{{#isGoSubmodule}}/{{packageName}}{{/isGoSubmodule}}"
+    "github.com/PaesslerAG/jsonpath"
 )
 
 type request struct {
@@ -51,6 +53,8 @@ type feature struct {
 	Request   *request
 	Response  *http.Response
     Context   context.Context
+    PreviousResponse *http.Response
+    PreviousBody    []byte
 }
 
 func (f *feature) givenThereIsARequestForTheApi(ctx context.Context, operationId string, classname string) (context.Context, error) {
@@ -226,6 +230,30 @@ func (f *feature) givenTheParameterIsTheFile(ctx context.Context, param string, 
     return ctx, fmt.Errorf("%s.%s does not have a parameter called %s", f.Request.Classname, f.Request.OperationId, param)
 }
 
+func (f *feature) givenTheParameterIsFromPreviousResponse(ctx context.Context, parameter, jsonPath string) (context.Context, error) {
+    if f.PreviousResponse == nil {
+        return ctx, fmt.Errorf("No previous response exists")
+    }
+
+    contentType := f.PreviousResponse.Header.Get("Content-Type")
+    if !strings.Contains(contentType, "application/json") {
+        return ctx, fmt.Errorf("Previous response is not JSON")
+    }
+
+    var data interface{}
+    if err := json.Unmarshal(f.PreviousBody, &data); err != nil {
+        return ctx, fmt.Errorf("Failed to unmarshal previous response: %v", err)
+    }
+
+    value, err := jsonpath.Get(jsonPath, data)
+    if err != nil {
+        return ctx, fmt.Errorf("Failed to evaluate JSON Path: %v", err)
+    }
+
+    f.Request.Parameters[parameter] = value
+    return ctx, nil
+}
+
 func (f *feature) whenTheRequestIsSent(ctx context.Context) (context.Context, error) {
     {{#apiInfo.apis}}
     if f.Request.Classname == "{{#lambda.pascalcase}}{{#lambda.snakecase}}{{classname}}{{/lambda.snakecase}}{{/lambda.pascalcase}}" {
@@ -262,6 +290,16 @@ func (f *feature) whenTheRequestIsSent(ctx context.Context) (context.Context, er
             }
 
             f.Response = response
+            f.PreviousResponse = response
+            
+            if response.Body != nil {
+                f.PreviousBody, err = io.ReadAll(response.Body)
+                if err != nil {
+                    return ctx, fmt.Errorf("Failed to read response body: %v", err)
+                }
+                // Reset the response body so it can be read again
+                response.Body = io.NopCloser(bytes.NewBuffer(f.PreviousBody))
+            }
         }
         {{^-last}}
 
@@ -503,12 +541,14 @@ func InitializeScenario(t *testing.T) func(*godog.ScenarioContext) {
             {{/hasApiKeyMethods}}
         }
 
-        configuration := {{goImportAlias}}.NewConfiguration()
-        configuration.Scheme = targetUrl.Scheme
-        configuration.Host = targetUrl.Host
+        config := {{goImportAlias}}.NewConfiguration()
+        config.Scheme = targetUrl.Scheme
+        config.Host = targetUrl.Host
         feat := &feature {
-            APIClient: {{goImportAlias}}.NewAPIClient(configuration),
+            APIClient: {{goImportAlias}}.NewAPIClient(config),
             Context: ctx,
+            PreviousResponse: nil,
+            PreviousBody: nil,
         }
 
         sc.Given(`^there is a "([^"]*)" request for the "([^"]*)"$`, feat.givenThereIsARequestForTheApi)
@@ -517,9 +557,10 @@ func InitializeScenario(t *testing.T) func(*godog.ScenarioContext) {
         sc.Given(`^the "([^"]*)" parameter has a JSON value of:$`, feat.givenTheParameterHasAJsonValueOf)
         sc.Given(`^the "([^"]*)" parameter has the following values:$`, feat.givenTheParameterHasTheFollowingValues)
         sc.Given(`^the "([^"]*)" parameter is the file "([^"]*)"$`, feat.givenTheParameterIsTheFile)
+        sc.Given(`^the "([^"]*)" parameter is "([^"]*)" from the previous response$`, feat.givenTheParameterIsFromPreviousResponse)
         sc.When(`^the request is sent$`, feat.whenTheRequestIsSent)
         sc.Then(`^the response status should be (\d+)$`, feat.thenTheResponseStatusShouldBe)
         sc.Then(`^the response content should be:$`, feat.thenTheResponseContentShouldBe)
-         sc.Then(`^the response content should contain the subtree:$`, feat.thenTheResponseShouldContainTheJsonSubtree)
+        sc.Then(`^the response content should contain the subtree:$`, feat.thenTheResponseShouldContainTheJsonSubtree)
     }
 }
