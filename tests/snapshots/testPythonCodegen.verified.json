@@ -514,6 +514,204 @@
             }
           }
         ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_verify_pet_response_contains_expected_fields",
+        "name": "Verify pet response contains expected fields",
+        "line": 97,
+        "description": "This scenario ensures that the response contains specific fields (e.g., \"name\" and \"tag\") without requiring an exact match for the entire JSON.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "line": 100,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "line": 101,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 102,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 103,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the response content should contain the subtree:",
+            "line": 104,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_verify_pet_response_contains_nested_subtree",
+        "name": "Verify pet response contains nested subtree",
+        "line": 109,
+        "description": "This scenario ensures that the response contains a nested subtree (e.g., a \"category\" object with an \"id\" and \"name\").",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "line": 112,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "line": 113,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 114,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 115,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the response content should contain the subtree:",
+            "line": 116,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_verify_pet_list_response_contains_at_least_one_matching_pet",
+        "name": "Verify pet list response contains at least one matching pet",
+        "line": 121,
+        "description": "This scenario ensures that a list response contains at least one pet with specific fields (e.g., a pet with \"name: string\").",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "line": 124,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"tags\" parameter has the following values:",
+            "line": 125,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 129,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 130,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the response content should contain the subtree:",
+            "line": 131,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
       }
     ]
   }

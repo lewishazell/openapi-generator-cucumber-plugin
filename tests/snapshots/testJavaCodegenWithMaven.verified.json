@@ -784,6 +784,304 @@
             }
           }
         ]
+      },
+      {
+        "line": 97,
+        "id": "petstore-api;verify-pet-response-contains-expected-fields",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "name": "Verify pet response contains expected fields",
+        "description": "This scenario ensures that the response contains specific fields (e.g., \"name\" and \"tag\") without requiring an exact match for the entire JSON.",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "line": 100,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenThereIsARequestForTheApi(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"findPetById\"",
+                  "offset": 11
+                },
+                {
+                  "val": "\"DefaultApi\"",
+                  "offset": 41
+                }
+              ]
+            },
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 101,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenTheParameterHasAValueOf(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"id\"",
+                  "offset": 4
+                },
+                {
+                  "val": "\"1\"",
+                  "offset": 34
+                }
+              ]
+            },
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 102,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.whenTheRequestIsSent()"
+            },
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 103,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseStatusIs(int)",
+              "arguments": [
+                {
+                  "val": "200",
+                  "offset": 30
+                }
+              ]
+            },
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 104,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseShouldContainTheJsonSubtree(io.cucumber.docstring.DocString)"
+            },
+            "name": "the response content should contain the subtree:",
+            "result": {
+              "status": "passed"
+            },
+            "doc_string": {
+              "line": 105,
+              "value": "{\"name\":\"string\",\"tag\":\"string\"}"
+            }
+          }
+        ]
+      },
+      {
+        "line": 109,
+        "id": "petstore-api;verify-pet-response-contains-nested-subtree",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "name": "Verify pet response contains nested subtree",
+        "description": "This scenario ensures that the response contains a nested subtree (e.g., a \"category\" object with an \"id\" and \"name\").",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "line": 112,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenThereIsARequestForTheApi(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"findPetById\"",
+                  "offset": 11
+                },
+                {
+                  "val": "\"DefaultApi\"",
+                  "offset": 41
+                }
+              ]
+            },
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 113,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenTheParameterHasAValueOf(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"id\"",
+                  "offset": 4
+                },
+                {
+                  "val": "\"1\"",
+                  "offset": 34
+                }
+              ]
+            },
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 114,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.whenTheRequestIsSent()"
+            },
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 115,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseStatusIs(int)",
+              "arguments": [
+                {
+                  "val": "200",
+                  "offset": 30
+                }
+              ]
+            },
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 116,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseShouldContainTheJsonSubtree(io.cucumber.docstring.DocString)"
+            },
+            "name": "the response content should contain the subtree:",
+            "result": {
+              "status": "passed"
+            },
+            "doc_string": {
+              "line": 117,
+              "value": "{\"tag\":\"string\"}"
+            }
+          }
+        ]
+      },
+      {
+        "line": 121,
+        "id": "petstore-api;verify-pet-list-response-contains-at-least-one-matching-pet",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "name": "Verify pet list response contains at least one matching pet",
+        "description": "This scenario ensures that a list response contains at least one pet with specific fields (e.g., a pet with \"name: string\").",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "line": 124,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenThereIsARequestForTheApi(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"findPets\"",
+                  "offset": 11
+                },
+                {
+                  "val": "\"DefaultApi\"",
+                  "offset": 38
+                }
+              ]
+            },
+            "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 125,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenTheParameterHasTheFollowingValues(java.lang.String,io.cucumber.datatable.DataTable)",
+              "arguments": [
+                {
+                  "val": "\"tags\"",
+                  "offset": 4
+                }
+              ]
+            },
+            "name": "the \"tags\" parameter has the following values:",
+            "result": {
+              "status": "passed"
+            },
+            "rows": [
+              {
+                "cells": [
+                  "value"
+                ]
+              },
+              {
+                "cells": [
+                  "-------"
+                ]
+              },
+              {
+                "cells": [
+                  "cat"
+                ]
+              }
+            ]
+          },
+          {
+            "keyword": "When ",
+            "line": 129,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.whenTheRequestIsSent()"
+            },
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 130,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseStatusIs(int)",
+              "arguments": [
+                {
+                  "val": "200",
+                  "offset": 30
+                }
+              ]
+            },
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 131,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseShouldContainTheJsonSubtree(io.cucumber.docstring.DocString)"
+            },
+            "name": "the response content should contain the subtree:",
+            "result": {
+              "status": "passed"
+            },
+            "doc_string": {
+              "line": 132,
+              "value": "[{\"name\":\"string\"}]"
+            }
+          }
+        ]
       }
     ],
     "tags": []

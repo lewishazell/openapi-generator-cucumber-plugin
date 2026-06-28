@@ -676,6 +676,275 @@
         ],
         "tags": [],
         "type": "scenario"
+      },
+      {
+        "description": "This scenario ensures that the response contains specific fields (e.g., \"name\" and \"tag\") without requiring an exact match for the entire JSON.",
+        "id": "petstore-api;verify-pet-response-contains-expected-fields",
+        "keyword": "Scenario",
+        "line": 97,
+        "name": "Verify pet response contains expected fields",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 100,
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:68"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 101,
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:74"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 102,
+            "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:247"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 103,
+            "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:278"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "{\"name\":\"string\",\"tag\":\"string\"}",
+                "line": 105
+              }
+            ],
+            "keyword": "And ",
+            "line": 104,
+            "name": "the response content should contain the subtree:",
+            "match": {
+              "location": "features/step_definitions/steps.js:292"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario ensures that the response contains a nested subtree (e.g., a \"category\" object with an \"id\" and \"name\").",
+        "id": "petstore-api;verify-pet-response-contains-nested-subtree",
+        "keyword": "Scenario",
+        "line": 109,
+        "name": "Verify pet response contains nested subtree",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 112,
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:68"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 113,
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:74"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 114,
+            "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:247"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 115,
+            "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:278"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "{\"tag\":\"string\"}",
+                "line": 117
+              }
+            ],
+            "keyword": "And ",
+            "line": 116,
+            "name": "the response content should contain the subtree:",
+            "match": {
+              "location": "features/step_definitions/steps.js:292"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario ensures that a list response contains at least one pet with specific fields (e.g., a pet with \"name: string\").",
+        "id": "petstore-api;verify-pet-list-response-contains-at-least-one-matching-pet",
+        "keyword": "Scenario",
+        "line": 121,
+        "name": "Verify pet list response contains at least one matching pet",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 124,
+            "name": "there is a \"findPets\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:68"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "-------"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "cat"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 125,
+            "name": "the \"tags\" parameter has the following values:",
+            "match": {
+              "location": "features/step_definitions/steps.js:157"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 129,
+            "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:247"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 130,
+            "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:278"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "[{\"name\":\"string\"}]",
+                "line": 132
+              }
+            ],
+            "keyword": "And ",
+            "line": 131,
+            "name": "the response content should contain the subtree:",
+            "match": {
+              "location": "features/step_definitions/steps.js:292"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
       }
     ],
     "id": "petstore-api",

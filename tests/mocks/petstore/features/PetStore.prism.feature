@@ -93,3 +93,42 @@ And the "id" parameter has a value of "1"
 And the "file" parameter is the file "photo.jpg"
 When the request is sent
 Then the response status should be 201
+
+Scenario: Verify pet response contains expected fields
+This scenario ensures that the response contains specific fields (e.g., "name" and "tag") without requiring an exact match for the entire JSON.
+
+Given there is a "findPetById" request for the "DefaultApi"
+And the "id" parameter has a value of "1"
+When the request is sent
+Then the response status should be 200
+And the response content should contain the subtree:
+  """
+  {"name":"string","tag":"string"}
+  """
+
+Scenario: Verify pet response contains nested subtree
+This scenario ensures that the response contains a nested subtree (e.g., a "category" object with an "id" and "name").
+
+Given there is a "findPetById" request for the "DefaultApi"
+And the "id" parameter has a value of "1"
+When the request is sent
+Then the response status should be 200
+And the response content should contain the subtree:
+  """
+  {"tag":"string"}
+  """
+
+Scenario: Verify pet list response contains at least one matching pet
+This scenario ensures that a list response contains at least one pet with specific fields (e.g., a pet with "name: string").
+
+Given there is a "findPets" request for the "DefaultApi"
+And the "tags" parameter has the following values:
+    | value |
+    |-------|
+    | cat   |
+When the request is sent
+Then the response status should be 200
+And the response content should contain the subtree:
+  """
+  [{"name":"string"}]
+  """
