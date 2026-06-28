@@ -712,6 +712,105 @@
             }
           }
         ]
+      },
+      {
+        "keyword": "Scenario",
+        "id": "test_chain_json_response_data_to_request_parameters_using_json_path",
+        "name": "Chain JSON response data to request parameters using JSON Path",
+        "line": 136,
+        "description": "This scenario verifies that a value from a previous response can be chained to a subsequent request using JSON Path.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given",
+            "name": "there is an \"addPet\" request for the \"DefaultApi\"",
+            "line": 139,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"PetDetails\" parameter has a JSON value of:",
+            "line": 140,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 144,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 145,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Given",
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "line": 147,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And",
+            "name": "the \"id\" parameter is \"$.id\" from the previous response",
+            "line": 148,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When",
+            "name": "the request is sent",
+            "line": 149,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then",
+            "name": "the response status should be 200",
+            "line": 150,
+            "match": {
+              "location": ""
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
       }
     ]
   }

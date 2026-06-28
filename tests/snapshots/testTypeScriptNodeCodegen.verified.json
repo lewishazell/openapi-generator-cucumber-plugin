@@ -22,7 +22,7 @@
             "line": 7,
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -34,7 +34,7 @@
             "line": 8,
             "name": "the \"id\" parameter has a value of \"1\"",
             "match": {
-              "location": "features/step_definitions/steps.js:74"
+              "location": "features/step_definitions/steps.js:76"
             },
             "result": {
               "status": "passed"
@@ -46,7 +46,7 @@
             "line": 9,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -58,7 +58,7 @@
             "line": 10,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
             "result": {
               "status": "passed"
@@ -75,8 +75,15 @@
             "line": 11,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:281"
+              "location": "features/step_definitions/steps.js:305"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }
@@ -105,7 +112,7 @@
             "line": 19,
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -117,7 +124,7 @@
             "line": 20,
             "name": "the \"id\" parameter has a value of \"1\"",
             "match": {
-              "location": "features/step_definitions/steps.js:74"
+              "location": "features/step_definitions/steps.js:76"
             },
             "result": {
               "status": "passed"
@@ -129,7 +136,7 @@
             "line": 21,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -141,7 +148,7 @@
             "line": 22,
             "name": "the response status should be 201",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
             "result": {
               "status": "failed"
@@ -158,10 +165,17 @@
             "line": 23,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:281"
+              "location": "features/step_definitions/steps.js:305"
             },
             "result": {
               "status": "skipped"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed"
             }
           }
         ],
@@ -188,7 +202,7 @@
             "line": 31,
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -200,7 +214,7 @@
             "line": 32,
             "name": "the \"id\" parameter has a value of \"1\"",
             "match": {
-              "location": "features/step_definitions/steps.js:74"
+              "location": "features/step_definitions/steps.js:76"
             },
             "result": {
               "status": "passed"
@@ -212,7 +226,7 @@
             "line": 33,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -224,7 +238,7 @@
             "line": 34,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
             "result": {
               "status": "passed"
@@ -241,10 +255,17 @@
             "line": 35,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:281"
+              "location": "features/step_definitions/steps.js:305"
             },
             "result": {
               "status": "failed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed"
             }
           }
         ],
@@ -271,7 +292,7 @@
             "line": 43,
             "name": "there is a \"deletePet\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -283,7 +304,7 @@
             "line": 44,
             "name": "the \"id\" parameter has a value of \"1\"",
             "match": {
-              "location": "features/step_definitions/steps.js:74"
+              "location": "features/step_definitions/steps.js:76"
             },
             "result": {
               "status": "passed"
@@ -295,7 +316,7 @@
             "line": 45,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -307,8 +328,15 @@
             "line": 46,
             "name": "the response status should be 204",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }
@@ -337,7 +365,7 @@
             "line": 51,
             "name": "there is a \"findPets\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -374,7 +402,7 @@
             "line": 52,
             "name": "the \"tags\" parameter has the following values:",
             "match": {
-              "location": "features/step_definitions/steps.js:157"
+              "location": "features/step_definitions/steps.js:159"
             },
             "result": {
               "status": "passed"
@@ -386,7 +414,7 @@
             "line": 57,
             "name": "the \"limit\" parameter has a value of \"2\"",
             "match": {
-              "location": "features/step_definitions/steps.js:74"
+              "location": "features/step_definitions/steps.js:76"
             },
             "result": {
               "status": "passed"
@@ -398,7 +426,7 @@
             "line": 58,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -410,7 +438,7 @@
             "line": 59,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
             "result": {
               "status": "passed"
@@ -427,8 +455,15 @@
             "line": 60,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:281"
+              "location": "features/step_definitions/steps.js:305"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }
@@ -457,7 +492,7 @@
             "line": 68,
             "name": "there is a \"findPets\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -494,7 +529,7 @@
             "line": 69,
             "name": "the \"tags\" parameter has the following values:",
             "match": {
-              "location": "features/step_definitions/steps.js:157"
+              "location": "features/step_definitions/steps.js:159"
             },
             "result": {
               "status": "passed"
@@ -506,7 +541,7 @@
             "line": 74,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -518,8 +553,15 @@
             "line": 75,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }
@@ -548,7 +590,7 @@
             "line": 80,
             "name": "there is an \"addPet\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:71"
+              "location": "features/step_definitions/steps.js:73"
             },
             "result": {
               "status": "passed"
@@ -565,7 +607,7 @@
             "line": 81,
             "name": "the \"PetDetails\" parameter has a JSON value of:",
             "match": {
-              "location": "features/step_definitions/steps.js:115"
+              "location": "features/step_definitions/steps.js:117"
             },
             "result": {
               "status": "passed"
@@ -577,7 +619,7 @@
             "line": 85,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -589,8 +631,15 @@
             "line": 86,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }
@@ -619,7 +668,7 @@
             "line": 91,
             "name": "there is an \"addPetPhotoById\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:71"
+              "location": "features/step_definitions/steps.js:73"
             },
             "result": {
               "status": "passed"
@@ -631,7 +680,7 @@
             "line": 92,
             "name": "the \"id\" parameter has a value of \"1\"",
             "match": {
-              "location": "features/step_definitions/steps.js:74"
+              "location": "features/step_definitions/steps.js:76"
             },
             "result": {
               "status": "passed"
@@ -643,7 +692,7 @@
             "line": 93,
             "name": "the \"file\" parameter is the file \"photo.jpg\"",
             "match": {
-              "location": "features/step_definitions/steps.js:199"
+              "location": "features/step_definitions/steps.js:201"
             },
             "result": {
               "status": "passed"
@@ -655,7 +704,7 @@
             "line": 94,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -667,8 +716,15 @@
             "line": 95,
             "name": "the response status should be 201",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }
@@ -697,7 +753,7 @@
             "line": 100,
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -709,7 +765,7 @@
             "line": 101,
             "name": "the \"id\" parameter has a value of \"1\"",
             "match": {
-              "location": "features/step_definitions/steps.js:74"
+              "location": "features/step_definitions/steps.js:76"
             },
             "result": {
               "status": "passed"
@@ -721,7 +777,7 @@
             "line": 102,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -733,7 +789,7 @@
             "line": 103,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
             "result": {
               "status": "passed"
@@ -750,8 +806,15 @@
             "line": 104,
             "name": "the response content should contain the subtree:",
             "match": {
-              "location": "features/step_definitions/steps.js:292"
+              "location": "features/step_definitions/steps.js:319"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }
@@ -780,7 +843,7 @@
             "line": 112,
             "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -792,7 +855,7 @@
             "line": 113,
             "name": "the \"id\" parameter has a value of \"1\"",
             "match": {
-              "location": "features/step_definitions/steps.js:74"
+              "location": "features/step_definitions/steps.js:76"
             },
             "result": {
               "status": "passed"
@@ -804,7 +867,7 @@
             "line": 114,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -816,7 +879,7 @@
             "line": 115,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
             "result": {
               "status": "passed"
@@ -833,8 +896,15 @@
             "line": 116,
             "name": "the response content should contain the subtree:",
             "match": {
-              "location": "features/step_definitions/steps.js:292"
+              "location": "features/step_definitions/steps.js:319"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }
@@ -863,7 +933,7 @@
             "line": 124,
             "name": "there is a \"findPets\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:68"
+              "location": "features/step_definitions/steps.js:70"
             },
             "result": {
               "status": "passed"
@@ -895,7 +965,7 @@
             "line": 125,
             "name": "the \"tags\" parameter has the following values:",
             "match": {
-              "location": "features/step_definitions/steps.js:157"
+              "location": "features/step_definitions/steps.js:159"
             },
             "result": {
               "status": "passed"
@@ -907,7 +977,7 @@
             "line": 129,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:247"
+              "location": "features/step_definitions/steps.js:266"
             },
             "result": {
               "status": "passed"
@@ -919,7 +989,7 @@
             "line": 130,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:278"
+              "location": "features/step_definitions/steps.js:302"
             },
             "result": {
               "status": "passed"
@@ -936,8 +1006,141 @@
             "line": 131,
             "name": "the response content should contain the subtree:",
             "match": {
-              "location": "features/step_definitions/steps.js:292"
+              "location": "features/step_definitions/steps.js:319"
             },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario verifies that a value from a previous response can be chained to a subsequent request using JSON Path.",
+        "id": "petstore-api;chain-json-response-data-to-request-parameters-using-json-path",
+        "keyword": "Scenario",
+        "line": 136,
+        "name": "Chain JSON response data to request parameters using JSON Path",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 139,
+            "name": "there is an \"addPet\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:73"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "content": "{\"name\": \"Pickle\", \"tag\": \"cat\"}",
+                "line": 141
+              }
+            ],
+            "keyword": "And ",
+            "line": 140,
+            "name": "the \"PetDetails\" parameter has a JSON value of:",
+            "match": {
+              "location": "features/step_definitions/steps.js:117"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 144,
+            "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:266"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 145,
+            "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:302"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 147,
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "match": {
+              "location": "features/step_definitions/steps.js:70"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 148,
+            "name": "the \"id\" parameter is \"$.id\" from the previous response",
+            "match": {
+              "location": "features/step_definitions/steps.js:249"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 149,
+            "name": "the request is sent",
+            "match": {
+              "location": "features/step_definitions/steps.js:266"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 150,
+            "name": "the response status should be 200",
+            "match": {
+              "location": "features/step_definitions/steps.js:302"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
             "result": {
               "status": "passed"
             }

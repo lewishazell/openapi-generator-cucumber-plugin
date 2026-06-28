@@ -100,6 +100,16 @@
               "value": "{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}"
             }
           }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
         ]
       },
       {
@@ -193,6 +203,16 @@
             "doc_string": {
               "line": 24,
               "value": "{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}"
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
             }
           }
         ]
@@ -290,6 +310,16 @@
               "value": "{\"name\":\"Pickle\",\"tag\":\"cat\",\"id\":1}"
             }
           }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
         ]
       },
       {
@@ -366,6 +396,16 @@
               ]
             },
             "name": "the response status should be 204",
+            "result": {
+              "status": "passed"
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
             "result": {
               "status": "passed"
             }
@@ -504,6 +544,16 @@
               "value": "[{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}]"
             }
           }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
         ]
       },
       {
@@ -602,6 +652,16 @@
               "status": "passed"
             }
           }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
         ]
       },
       {
@@ -678,6 +738,16 @@
               ]
             },
             "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
             "result": {
               "status": "passed"
             }
@@ -783,6 +853,16 @@
               "status": "skipped"
             }
           }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
         ]
       },
       {
@@ -878,6 +958,16 @@
               "value": "{\"name\":\"string\",\"tag\":\"string\"}"
             }
           }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
         ]
       },
       {
@@ -971,6 +1061,16 @@
             "doc_string": {
               "line": 117,
               "value": "{\"tag\":\"string\"}"
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
             }
           }
         ]
@@ -1079,6 +1179,176 @@
             "doc_string": {
               "line": 132,
               "value": "[{\"name\":\"string\"}]"
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      },
+      {
+        "line": 136,
+        "id": "petstore-api;chain-json-response-data-to-request-parameters-using-json-path",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "name": "Chain JSON response data to request parameters using JSON Path",
+        "description": "This scenario verifies that a value from a previous response can be chained to a subsequent request using JSON Path.",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "line": 139,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenThereIsAnRequestForTheApi(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"addPet\"",
+                  "offset": 12
+                },
+                {
+                  "val": "\"DefaultApi\"",
+                  "offset": 37
+                }
+              ]
+            },
+            "name": "there is an \"addPet\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 140,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenTheParameterHasAJsonValueOf(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"PetDetails\"",
+                  "offset": 4
+                }
+              ]
+            },
+            "name": "the \"PetDetails\" parameter has a JSON value of:",
+            "result": {
+              "status": "passed"
+            },
+            "doc_string": {
+              "line": 141,
+              "value": "{\"name\": \"Pickle\", \"tag\": \"cat\"}"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 144,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.whenTheRequestIsSent()"
+            },
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 145,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseStatusIs(int)",
+              "arguments": [
+                {
+                  "val": "200",
+                  "offset": 30
+                }
+              ]
+            },
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Given ",
+            "line": 147,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenThereIsARequestForTheApi(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"findPetById\"",
+                  "offset": 11
+                },
+                {
+                  "val": "\"DefaultApi\"",
+                  "offset": 41
+                }
+              ]
+            },
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 148,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenTheParameterIsFromPreviousResponse(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"id\"",
+                  "offset": 4
+                },
+                {
+                  "val": "\"$.id\"",
+                  "offset": 22
+                }
+              ]
+            },
+            "name": "the \"id\" parameter is \"$.id\" from the previous response",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 149,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.whenTheRequestIsSent()"
+            },
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 150,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseStatusIs(int)",
+              "arguments": [
+                {
+                  "val": "200",
+                  "offset": 30
+                }
+              ]
+            },
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
             }
           }
         ]

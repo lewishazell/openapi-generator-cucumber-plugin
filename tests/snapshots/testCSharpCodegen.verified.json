@@ -70,6 +70,16 @@
             }
           }
         ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
+            }
+          }
+        ],
         "type": "scenario"
       },
       {
@@ -146,6 +156,16 @@
             }
           }
         ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
+            }
+          }
+        ],
         "type": "scenario"
       },
       {
@@ -208,6 +228,16 @@
             },
             "match": {
               "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseStatusIs(Int32)"
+            }
+          }
+        ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
             }
           }
         ],
@@ -314,6 +344,16 @@
             }
           }
         ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
+            }
+          }
+        ],
         "type": "scenario"
       },
       {
@@ -384,6 +424,129 @@
             }
           }
         ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
+            }
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario verifies that a value from a previous response can be chained to a subsequent request using JSON Path.",
+        "id": "petstore-api;chain-json-response-data-to-request-parameters-using-json-path",
+        "keyword": "Scenario",
+        "line": 136,
+        "name": "Chain JSON response data to request parameters using JSON Path",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "line": 139,
+            "name": "there is an \"addPet\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenThereIsAnRequestForTheApi(String,String)"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 140,
+            "name": "the \"PetDetails\" parameter has a JSON value of:",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAJsonValueOf(String,String)"
+            },
+            "doc_string": {
+              "content_type": "",
+              "line": 141,
+              "value": "{\"name\": \"Pickle\", \"tag\": \"cat\"}"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 144,
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.WhenTheRequestIsSent()"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 145,
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseStatusIs(Int32)"
+            }
+          },
+          {
+            "keyword": "Given ",
+            "line": 147,
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenThereIsARequestForTheApi(String,String)"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 148,
+            "name": "the \"id\" parameter is \"$.id\" from the previous response",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterIsFromPreviousResponse(String,String)"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 149,
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.WhenTheRequestIsSent()"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 150,
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseStatusIs(Int32)"
+            }
+          }
+        ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
+            }
+          }
+        ],
         "type": "scenario"
       },
       {
@@ -435,6 +598,16 @@
             },
             "match": {
               "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseStatusIs(Int32)"
+            }
+          }
+        ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
             }
           }
         ],
@@ -505,6 +678,16 @@
               "content_type": "",
               "line": 12,
               "value": "{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}"
+            }
+          }
+        ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
             }
           }
         ],
@@ -595,6 +778,16 @@
             }
           }
         ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
+            }
+          }
+        ],
         "type": "scenario"
       },
       {
@@ -651,6 +844,96 @@
             },
             "match": {
               "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseStatusIs(Int32)"
+            }
+          }
+        ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
+            }
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "This scenario ensures that the user can successfully retrieve a pet from the store by its ID, but asserts an incorrect response status.",
+        "id": "petstore-api;successfully-find-a-pet-at-the-pet-store-with-an-incorrect-response-status",
+        "keyword": "Scenario",
+        "line": 16,
+        "name": "Successfully find a pet at the pet store with an incorrect response status",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "line": 19,
+            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenThereIsARequestForTheApi(String,String)"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 20,
+            "name": "the \"id\" parameter has a value of \"1\"",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 21,
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.WhenTheRequestIsSent()"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 22,
+            "name": "the response status should be 201",
+            "result": {
+              "status": "failed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseStatusIs(Int32)"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 23,
+            "name": "the response content should be:",
+            "result": {
+              "status": "skipped"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseContentShouldBe(String)"
+            },
+            "doc_string": {
+              "content_type": "",
+              "line": 24,
+              "value": "{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}"
+            }
+          }
+        ],
+        "after": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "match": {
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
             }
           }
         ],
@@ -724,73 +1007,13 @@
             }
           }
         ],
-        "type": "scenario"
-      },
-      {
-        "description": "This scenario ensures that the user can successfully retrieve a pet from the store by its ID, but asserts an incorrect response status.",
-        "id": "petstore-api;successfully-find-a-pet-at-the-pet-store-with-an-incorrect-response-status",
-        "keyword": "Scenario",
-        "line": 16,
-        "name": "Successfully find a pet at the pet store with an incorrect response status",
-        "steps": [
+        "after": [
           {
-            "keyword": "Given ",
-            "line": 19,
-            "name": "there is a \"findPetById\" request for the \"DefaultApi\"",
             "result": {
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenThereIsARequestForTheApi(String,String)"
-            }
-          },
-          {
-            "keyword": "And ",
-            "line": 20,
-            "name": "the \"id\" parameter has a value of \"1\"",
-            "result": {
-              "status": "passed"
-            },
-            "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
-            }
-          },
-          {
-            "keyword": "When ",
-            "line": 21,
-            "name": "the request is sent",
-            "result": {
-              "status": "passed"
-            },
-            "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.WhenTheRequestIsSent()"
-            }
-          },
-          {
-            "keyword": "Then ",
-            "line": 22,
-            "name": "the response status should be 201",
-            "result": {
-              "status": "failed"
-            },
-            "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseStatusIs(Int32)"
-            }
-          },
-          {
-            "keyword": "And ",
-            "line": 23,
-            "name": "the response content should be:",
-            "result": {
-              "status": "skipped"
-            },
-            "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.ThenTheResponseContentShouldBe(String)"
-            },
-            "doc_string": {
-              "content_type": "",
-              "line": 24,
-              "value": "{\"name\":\"string\",\"tag\":\"string\",\"id\":-9007199254740991}"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.AfterScenario()"
             }
           }
         ],

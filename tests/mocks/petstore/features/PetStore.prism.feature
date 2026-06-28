@@ -132,3 +132,19 @@ And the response content should contain the subtree:
   """
   [{"name":"string"}]
   """
+
+Scenario: Chain JSON response data to request parameters using JSON Path
+This scenario verifies that a value from a previous response can be chained to a subsequent request using JSON Path.
+
+Given there is an "addPet" request for the "DefaultApi"
+And the "PetDetails" parameter has a JSON value of:
+  """
+  {"name": "Pickle", "tag": "cat"}
+  """
+When the request is sent
+Then the response status should be 200
+
+Given there is a "findPetById" request for the "DefaultApi"
+And the "id" parameter is "$.id" from the previous response
+When the request is sent
+Then the response status should be 200
