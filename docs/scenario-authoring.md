@@ -111,6 +111,27 @@ The plugin automatically coerces string values into the following types as defin
 
 Type errors will be thrown if the string is in the incorrect format or coersion is not possible.
 
+### JSON Path Chaining
+
+You can chain JSON response data to request parameters using JSON Path. This allows you to extract values from a previous response and use them in subsequent requests.
+
+```gherkin
+Given the "id" parameter is "$.id" from the previous response
+```
+
+- `id` is the parameter name in the current request.
+- `$.id` is the JSON Path expression to extract the `id` field from the previous response.
+
+**Requirements:**
+- The previous response must exist.
+- The previous response must be JSON.
+- The JSON Path must return a valid result.
+
+**Error Cases:**
+- No previous response exists.
+- Previous response is not JSON.
+- JSON Path query returns no results.
+
 ### 3. Send the Request
 
 ``` cucumber
