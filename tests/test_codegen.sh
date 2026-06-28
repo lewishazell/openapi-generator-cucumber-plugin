@@ -89,6 +89,7 @@ testJavaCodegenWithMaven() {
     openapi-generator-cli --custom-generator "$JAR_FILE" generate -g java-cucumber --package-name PetStore -i mocks/petstore/petstore-extended.yaml -o out -p cucumberTargetHost=http://localhost:4010
     mkdir -p $resourcesdir
     cp -r mocks/petstore/features/* $resourcesdir
+    cp -r mocks/petstore/files/* out
     
     (cd out && mvn test)
     

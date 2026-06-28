@@ -833,7 +833,7 @@
             },
             "name": "the request is sent",
             "result": {
-              "status": "failed"
+              "status": "passed"
             }
           },
           {
@@ -850,7 +850,7 @@
             },
             "name": "the response status should be 201",
             "result": {
-              "status": "skipped"
+              "status": "passed"
             }
           }
         ],
