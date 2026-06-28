@@ -180,7 +180,7 @@ filter() {
 }
 
 scrubCucumberReport() {
-    jq --indent 2 'map(.elements |= map(del(.start_timestamp?) | .steps |= map(del(.result.duration?, .result.error_message?))))'
+    jq --indent 2 'map(.elements |= map(del(.start_timestamp?) | .steps |= map(del(.result.duration?, .result.error_message?)) | if .after then del(.after[].result.duration?) else . end))'
 }
 
 verifyJson() {

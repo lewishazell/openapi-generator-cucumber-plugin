@@ -1,0 +1,97 @@
+[
+  {
+    "line": 1,
+    "uri": "classpath:org/openapitools/client/Earth.feature",
+    "id": "earth-supercomputer-api",
+    "keyword": "Feature",
+    "name": "Earth Supercomputer API",
+    "description": "",
+    "elements": [
+      {
+        "line": 3,
+        "id": "earth-supercomputer-api;successfully-get-the-meaning-of-life",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "name": "Successfully get the meaning of life",
+        "description": "",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "line": 5,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.givenThereIsARequestForTheApi(java.lang.String,java.lang.String)",
+              "arguments": [
+                {
+                  "val": "\"getTheMeaningOfLife\"",
+                  "offset": 11
+                },
+                {
+                  "val": "\"DefaultApi\"",
+                  "offset": 49
+                }
+              ]
+            },
+            "name": "there is a \"getTheMeaningOfLife\" request for the \"DefaultApi\"",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "When ",
+            "line": 6,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.whenTheRequestIsSent()"
+            },
+            "name": "the request is sent",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "Then ",
+            "line": 7,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseStatusIs(int)",
+              "arguments": [
+                {
+                  "val": "200",
+                  "offset": 30
+                }
+              ]
+            },
+            "name": "the response status should be 200",
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "And ",
+            "line": 8,
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.thenTheResponseContentShouldBe(io.cucumber.docstring.DocString)"
+            },
+            "name": "the response content should be:",
+            "result": {
+              "status": "passed"
+            },
+            "doc_string": {
+              "line": 9,
+              "value": "{ \"meaning\": \"42\" }"
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "org.openapitools.client.StepDefinitions.afterScenario()"
+            },
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      }
+    ],
+    "tags": []
+  }
+]
