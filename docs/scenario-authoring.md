@@ -111,7 +111,7 @@ The plugin automatically coerces string values into the following types as defin
 
 Type errors will be thrown if the string is in the incorrect format or coersion is not possible.
 
-### JSON Path Chaining
+### JSON path chaining
 
 You can chain JSON response data to request parameters using JSON Path. This allows you to extract values from a previous response and use them in subsequent requests.
 
@@ -141,7 +141,7 @@ When the request is sent
 - Must come after setting parameters and before assertions.
 - Internally, it executes the constructed request and stores the response for use in assertion steps.
 
-### 4. Assert on the Response
+### 4. Assert on the response
 
 #### Status code:
 
@@ -158,7 +158,7 @@ Then the response content should be:
   """
 ```
 
-### Semantic JSON Comparison
+### Semantic JSON comparison
 
 JSON content assertions use semantic equality, meaning:
 
@@ -166,7 +166,7 @@ JSON content assertions use semantic equality, meaning:
 - Whitespace is ignored
 - Values must match in structure and content
 
-#### Full-Body Matching:
+#### Full-body matching:
 ```gherkin
 Then the response content should be:
   """
@@ -174,7 +174,7 @@ Then the response content should be:
   """
 ```
 
-#### Partial Matching (subtree contains):
+#### Partial matching (subtree contains):
 ```gherkin
 Then the response content should contain the subtree:
   """
@@ -206,7 +206,7 @@ even if the actual response is:
 }
 ```
 
-## Full Example
+## Full example
 
 ```cucumber
 Feature: PetStore API
@@ -238,7 +238,7 @@ And the response content should be:
 - Always verify the normalized names used in generated step implementation code if you are unsure what to use in the spec
 - Table parameters are ideal for arrays and repeated query parameters
 
-## Related Resources
+## Related resources
 
 - [Cucumber Documentation](https://cucumber.io/docs/)
 - [OpenAPI Specification](https://swagger.io/specification/)
