@@ -227,6 +227,32 @@ def then_the_response_content_should_be(test_context, docstring):
     else:
         raise ValueError(f"Cannot assert against unsupported content type: {content_type}")
 
+
+def contains_subtree(actual, expected):
+    if isinstance(expected, dict):
+        return all(key in actual and contains_subtree(actual[key], expected[key]) for key in expected)
+    elif isinstance(expected, list):
+        return all(any(contains_subtree(a, e) for a in actual) for e in expected)
+    else:
+        return actual == expected
+
+
+@then(parsers.parse("the response content should contain the subtree:"))
+def then_the_response_should_contain_the_json_subtree(test_context, docstring):
+    content_type = ""
+    if test_context["response"].headers is not None:
+        headers_lower = {k.lower(): v for k, v in test_context["response"].headers.items()}
+        content_type = headers_lower.get("content-type", "").lower()
+
+    if "application/json" in content_type:
+        actual_json = test_context["response"].raw_data.decode('utf-8')
+        actual = json.loads(actual_json)
+        expected = json.loads(docstring)
+
+        assert contains_subtree(actual, expected), f"Response does not contain the expected subtree: {docstring}"
+    else:
+        raise ValueError(f"Cannot assert against unsupported content type: {content_type}")
+
 class Request:
     def __init__(self, classname, operation_id):
         self.classname = classname

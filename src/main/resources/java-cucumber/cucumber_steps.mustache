@@ -302,6 +302,57 @@ public class StepDefinitions {
         }
     }
 
+    public static boolean containsSubtree(JsonElement actual, JsonElement expected) {
+        if (expected.isJsonPrimitive()) {
+            return actual.equals(expected);
+        } else if (expected.isJsonObject()) {
+            JsonObject expectedObj = expected.getAsJsonObject();
+            JsonObject actualObj = actual.getAsJsonObject();
+            for (java.util.Map.Entry<String, JsonElement> entry : expectedObj.entrySet()) {
+                if (!actualObj.has(entry.getKey()) || !containsSubtree(actualObj.get(entry.getKey()), entry.getValue())) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (expected.isJsonArray()) {
+            JsonArray expectedArr = expected.getAsJsonArray();
+            JsonArray actualArr = actual.getAsJsonArray();
+            for (JsonElement expectedElem : expectedArr) {
+                boolean found = false;
+                for (JsonElement actualElem : actualArr) {
+                    if (containsSubtree(actualElem, expectedElem)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Then("the response content should contain the subtree:")
+    public void thenTheResponseShouldContainTheJsonSubtree(DocString content) {
+        String contentType = null;
+
+        if (response.getHeaders().containsKey("Content-Type")) {
+            contentType = response.getHeaders().get("Content-Type").stream()
+                    .findFirst()
+                    .map(String::toLowerCase)
+                    .orElse(null);
+        }
+
+        if (contentType != null && contentType.startsWith("application/json")) {
+            JsonElement actual = JsonParser.parseString(gson.toJson(response.getData()));
+            JsonElement expected = JsonParser.parseString(content.getContent());
+
+            assertThat(containsSubtree(actual, expected)).isTrue();
+        } else {
+            throw new UnsupportedOperationException("Cannot assert against unsupported content type: " + contentType);
+        }
+    }
+
     private class Request {
         private String classname;
         private String operationId;

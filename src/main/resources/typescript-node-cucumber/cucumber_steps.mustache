@@ -259,7 +259,40 @@ Then('the response content should be:', function(content: string) {
         const actual: any = JSON.parse(JSON.stringify(ctx.response?.body));
         const expected: any = JSON.parse(content);
 
-        assert.deepStrictEqual(actual, expected, `Exepcted response data to be '${content}' but got '${JSON.stringify(actual)}'`);
+        assert.deepStrictEqual(actual, expected, `Expected response data to be '${content}' but got '${JSON.stringify(actual)}'`);
+    } else {
+        throw new Error("Cannot assert against unsupported content type: " + type);
+    }
+});
+
+Then('the response content should contain the subtree:', function(content: string) {
+    const { type } = contentType.parse(ctx.response?.message.headers["content-type"]!);
+
+    if (type == "application/json") {
+        const actual: any = JSON.parse(JSON.stringify(ctx.response?.body));
+        const expected: any = JSON.parse(content);
+
+        function containsSubtree(actual: any, expected: any): boolean {
+            if (typeof expected !== 'object' || expected === null) {
+                return actual === expected;
+            }
+            if (Array.isArray(expected)) {
+                if (!Array.isArray(actual)) return false;
+                for (const expectedItem of expected) {
+                    if (!actual.some((actualItem: any) => containsSubtree(actualItem, expectedItem))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            for (const key in expected) {
+                if (!(key in actual)) return false;
+                if (!containsSubtree(actual[key], expected[key])) return false;
+            }
+            return true;
+        }
+
+        assert.ok(containsSubtree(actual, expected), `Response does not contain the expected subtree: ${content}`);
     } else {
         throw new Error("Cannot assert against unsupported content type: " + type);
     }

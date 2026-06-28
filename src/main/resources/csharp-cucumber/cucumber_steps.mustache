@@ -288,6 +288,42 @@ namespace {{packageName}}.Test
             response.StatusCode.ShouldBe((HttpStatusCode)statusCode);
         }
 
+        private static bool ContainsSubtree(JToken actual, JToken expected)
+        {
+            if (expected.Type == JTokenType.Object)
+            {
+                var expectedObj = (JObject)expected;
+                var actualObj = actual as JObject;
+                if (actualObj == null) return false;
+                foreach (var property in expectedObj.Properties())
+                {
+                    if (!actualObj.TryGetValue(property.Name, out var actualValue) || !ContainsSubtree(actualValue, property.Value))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else if (expected.Type == JTokenType.Array)
+            {
+                var expectedArr = (JArray)expected;
+                var actualArr = actual as JArray;
+                if (actualArr == null) return false;
+                foreach (var expectedElem in expectedArr)
+                {
+                    if (!actualArr.Any(a => ContainsSubtree(a, expectedElem)))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return JToken.DeepEquals(actual, expected);
+            }
+        }
+
         [Then("the response content should be:")]
         public void ThenTheResponseContentShouldBe(string content)
         {
@@ -303,6 +339,28 @@ namespace {{packageName}}.Test
                 var expected = JsonConvert.DeserializeObject<JToken>(content);
                 
                 JToken.DeepEquals(actual, expected).ShouldBeTrue();
+            }
+            else
+            {
+                throw new InvalidOperationException($"Cannot assert against unsupported media type: {mediaType?.MediaType}");
+            }
+        }
+
+         [Then("the response content should contain the subtree:")]
+        public void ThenTheResponseShouldContainTheJsonSubtree(string content)
+        {
+            MediaTypeHeaderValue? mediaType = null;
+            if(response.Headers.TryGetValue("Content-Type", out var contentTypeValues) && contentTypeValues.Count > 0)
+            {
+                mediaType = MediaTypeHeaderValue.Parse(contentTypeValues.First().ToLowerInvariant());
+            }
+
+            if (mediaType is { MediaType: "application/json" })
+            {
+                var actual = JsonConvert.DeserializeObject<JToken>(response.RawContent);
+                var expected = JsonConvert.DeserializeObject<JToken>(content);
+                
+                ContainsSubtree(actual, expected).ShouldBeTrue();
             }
             else
             {
