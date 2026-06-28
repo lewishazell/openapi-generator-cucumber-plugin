@@ -145,6 +145,27 @@ JSON content assertions use semantic equality, meaning:
 - Whitespace is ignored
 - Values must match in structure and content
 
+#### Full-Body Matching:
+```gherkin
+Then the response content should be:
+  """
+  { "name": "Pickle", "tag": "cat", "id": 1 }
+  """
+```
+
+#### Partial Matching (subtree contains):
+```gherkin
+Then the response content should contain the subtree:
+  """
+  { "name": "Pickle", "tag": "cat" }
+  """
+```
+
+The **subtree contains** assertion checks if the expected subtree exists within the actual response, ignoring extra fields. This is useful for:
+- Ignoring volatile fields (e.g., IDs, timestamps).
+- Validating nested structures without requiring a full match.
+- Asserting array contents (e.g., `[{ "name": "Pickle" }]`).
+
 Therefore, this assertion passes:
 
 ```cucumber
@@ -187,7 +208,7 @@ And the response content should be:
 |-------------------------|------------------------------------------------------------------------------------------------------|
 | Multiple requests       | You can issue multiple requests in a scenario. Just follow the create “params” sequence for each.    |
 | Step ordering           | Steps must follow the defined sequence. For example, assertions before sending a request will fail.  |
-| Partial JSON matching   | Only full-body, semantically equivalent JSON comparisons are currently supported.                    |
+| Partial JSON matching   | In addition to full-body JSON comparisons, you can assert that the response contains a **JSON subtree** (a subset of fields or nested structures). This is useful for ignoring volatile fields like IDs or timestamps. See the "Assert on the Response" section for details. |
 | API class name fallback | If an OpenAPI operation has no tags, it defaults to `DefaultApi`.                                    |
 
 ## Tips
