@@ -109,7 +109,7 @@ namespace {{packageName}}.Test
         }
 
         [Given("the {string} parameter has a value of {string}")]
-        public void GivenTheParameterAValueOf(string parameter, string value)
+        public void GivenTheParameterHasAValueOf(string parameter, string value)
         {
             {{#apiInfo.apis}}
             if (request.Classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}")
@@ -286,22 +286,7 @@ namespace {{packageName}}.Test
             }
 
             var value = result.Matches[0].Value;
-            if (value is JsonValue jsonValue && jsonValue.TryGetValue(out int intValue))
-            {
-                request.Parameters.Set(parameter, (long)intValue);
-            }
-            else if (value is JsonValue jsonValueLong && jsonValueLong.TryGetValue(out long longValue))
-            {
-                request.Parameters.Set(parameter, longValue);
-            }
-            else if (value is JsonValue jsonValueString && jsonValueString.TryGetValue(out string stringValue))
-            {
-                request.Parameters.Set(parameter, stringValue);
-            }
-            else
-            {
-                request.Parameters.Set(parameter, value.ToString());
-            }
+            GivenTheParameterHasAValueOf(parameter, value?.ToString() ?? string.Empty);
         }
 
         [When("the request is sent")]

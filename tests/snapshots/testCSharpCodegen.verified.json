@@ -28,7 +28,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterHasAValueOf(String,String)"
             }
           },
           {
@@ -194,7 +194,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterHasAValueOf(String,String)"
             }
           },
           {
@@ -302,7 +302,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterHasAValueOf(String,String)"
             }
           },
           {
@@ -382,7 +382,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterHasAValueOf(String,String)"
             }
           },
           {
@@ -575,7 +575,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterHasAValueOf(String,String)"
             }
           },
           {
@@ -639,7 +639,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterHasAValueOf(String,String)"
             }
           },
           {
@@ -885,7 +885,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterHasAValueOf(String,String)"
             }
           },
           {
@@ -965,7 +965,7 @@
               "status": "passed"
             },
             "match": {
-              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterAValueOf(String,String)"
+              "location": "PetStore.Test.PetStore.Test.StepDefinitions.GivenTheParameterHasAValueOf(String,String)"
             }
           },
           {
