@@ -18,8 +18,8 @@ import { JSONPath } from 'jsonpath-plus';
 
 class TestContext {
     public request: Request | undefined;
-    public response: { message: http.IncomingMessage, body: any } | undefined;
-    public previousResponse: { message: http.IncomingMessage, body: any } | undefined;
+    public response: { message: http.IncomingMessage, body: any, content: any } | undefined;
+    public previousResponse: { message: http.IncomingMessage, body: any, content: any } | undefined;
     public targetHost: string | undefined;
     public accessToken: string | undefined;
     public securityScheme: string | undefined;
@@ -257,8 +257,9 @@ When('the request is sent', async function() {
 
         if (ctx.request.operationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}") {
             let { response, body } = await api.{{operationId}}({{#allParams}}ctx.request.parameters["{{baseName}}"]{{^-last}}, {{/-last}}{{/allParams}});
-            ctx.response = { message: response, body };
-            ctx.previousResponse = { message: response, body };
+            const content: any = {{#returnType}}ObjectSerializer.serialize(body, "{{{returnType}}}"){{/returnType}}{{^returnType}}body{{/returnType}};
+            ctx.response = { message: response, body, content };
+            ctx.previousResponse = { message: response, body, content };
 
             return;
         }
@@ -278,7 +279,7 @@ Then('the response content should be:', function(content: string) {
     const { type } = contentType.parse(ctx.response?.message.headers["content-type"]!);
 
     if (type == "application/json") {
-        const actual: any = JSON.parse(JSON.stringify(ctx.response?.body));
+        const actual: any = JSON.parse(JSON.stringify(ctx.response?.content));
         const expected: any = JSON.parse(content);
 
         assert.deepStrictEqual(actual, expected, `Expected response data to be '${content}' but got '${JSON.stringify(actual)}'`);
@@ -295,7 +296,7 @@ Then('the response content should contain the subtree:', function(content: strin
     const { type } = contentType.parse(ctx.response?.message.headers["content-type"]!);
 
     if (type == "application/json") {
-        const actual: any = JSON.parse(JSON.stringify(ctx.response?.body));
+        const actual: any = JSON.parse(JSON.stringify(ctx.response?.content));
         const expected: any = JSON.parse(content);
 
         function containsSubtree(actual: any, expected: any): boolean {
