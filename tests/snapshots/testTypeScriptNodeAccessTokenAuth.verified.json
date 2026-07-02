@@ -22,7 +22,7 @@
             "line": 5,
             "name": "there is a \"getTheMeaningOfLife\" request for the \"DefaultApi\"",
             "match": {
-              "location": "features/step_definitions/steps.js:63"
+              "location": "features/step_definitions/steps.js:64"
             },
             "result": {
               "status": "passed"
@@ -34,7 +34,7 @@
             "line": 6,
             "name": "the request is sent",
             "match": {
-              "location": "features/step_definitions/steps.js:114"
+              "location": "features/step_definitions/steps.js:115"
             },
             "result": {
               "status": "passed"
@@ -46,7 +46,7 @@
             "line": 7,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:138"
+              "location": "features/step_definitions/steps.js:140"
             },
             "result": {
               "status": "passed"
@@ -63,7 +63,7 @@
             "line": 8,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:141"
+              "location": "features/step_definitions/steps.js:143"
             },
             "result": {
               "status": "passed"

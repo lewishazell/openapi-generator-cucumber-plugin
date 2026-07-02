@@ -58,7 +58,7 @@
             "line": 10,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -75,7 +75,7 @@
             "line": 11,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:305"
+              "location": "features/step_definitions/steps.js:310"
             },
             "result": {
               "status": "passed"
@@ -148,7 +148,7 @@
             "line": 22,
             "name": "the response status should be 201",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "failed"
@@ -165,7 +165,7 @@
             "line": 23,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:305"
+              "location": "features/step_definitions/steps.js:310"
             },
             "result": {
               "status": "skipped"
@@ -238,7 +238,7 @@
             "line": 34,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -255,7 +255,7 @@
             "line": 35,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:305"
+              "location": "features/step_definitions/steps.js:310"
             },
             "result": {
               "status": "failed"
@@ -328,7 +328,7 @@
             "line": 46,
             "name": "the response status should be 204",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -438,7 +438,7 @@
             "line": 59,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -455,7 +455,7 @@
             "line": 60,
             "name": "the response content should be:",
             "match": {
-              "location": "features/step_definitions/steps.js:305"
+              "location": "features/step_definitions/steps.js:310"
             },
             "result": {
               "status": "passed"
@@ -553,7 +553,7 @@
             "line": 75,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -631,7 +631,7 @@
             "line": 86,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -716,7 +716,7 @@
             "line": 95,
             "name": "the response status should be 201",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -789,7 +789,7 @@
             "line": 103,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -806,7 +806,7 @@
             "line": 104,
             "name": "the response content should contain the subtree:",
             "match": {
-              "location": "features/step_definitions/steps.js:319"
+              "location": "features/step_definitions/steps.js:324"
             },
             "result": {
               "status": "passed"
@@ -879,7 +879,7 @@
             "line": 115,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -896,7 +896,7 @@
             "line": 116,
             "name": "the response content should contain the subtree:",
             "match": {
-              "location": "features/step_definitions/steps.js:319"
+              "location": "features/step_definitions/steps.js:324"
             },
             "result": {
               "status": "passed"
@@ -989,7 +989,7 @@
             "line": 130,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -1006,7 +1006,7 @@
             "line": 131,
             "name": "the response content should contain the subtree:",
             "match": {
-              "location": "features/step_definitions/steps.js:319"
+              "location": "features/step_definitions/steps.js:324"
             },
             "result": {
               "status": "passed"
@@ -1084,7 +1084,7 @@
             "line": 145,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
@@ -1132,7 +1132,7 @@
             "line": 150,
             "name": "the response status should be 200",
             "match": {
-              "location": "features/step_definitions/steps.js:302"
+              "location": "features/step_definitions/steps.js:307"
             },
             "result": {
               "status": "passed"
