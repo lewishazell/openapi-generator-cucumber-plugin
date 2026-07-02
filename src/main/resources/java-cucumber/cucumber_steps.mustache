@@ -36,7 +36,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StepDefinitions {
-    private static Gson gson = new Gson();
+    private static Gson gson = {{invokerPackage}}.JSON.getGson();
     private Request request;
     private ApiResponse<?> response;
     private ApiResponse<?> previousResponse;
