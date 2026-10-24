@@ -20,7 +20,7 @@ This plugin generates Cucumber step definitions for OpenAPI specifications, enab
 - Node.js (for TypeScript tests)
 - Python 3.7+ (for Python tests)
 - Go 1.16+ (for Go tests)
-- .NET 6+ (for C# tests)
+- .NET 10+ (for C# tests)
 
 ### Build the plugin
 

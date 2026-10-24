@@ -10,6 +10,11 @@ public class CSharpCucumberGenerator extends CSharpClientCodegen {
     public CSharpCucumberGenerator() {
         super();
 
+        // The default C# library changed from `restsharp` to `generichost` in newer
+        // OpenAPI Generator versions. The generated step definitions target the
+        // `restsharp` client API, so pin the library to preserve compatibility.
+        // Pass `-p library=<name>` to override.
+        library = "restsharp";
         templateDir = "csharp-cucumber";
     }
 

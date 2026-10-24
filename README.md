@@ -14,7 +14,7 @@
 
 ## 🎯 Requirements
 
-To use this plugin, you'll need **[OpenAPI Generator](https://openapi-generator.tech/docs/installation)** version **7.11.0**.
+To use this plugin, you'll need **[OpenAPI Generator](https://openapi-generator.tech/docs/installation)** version **7.26.0**.
 
 Ensure that both OpenAPI Generator is correctly set up before attempting to use this plugin.
 
