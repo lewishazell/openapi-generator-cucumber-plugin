@@ -32,6 +32,8 @@ This generates `target/openapi-generator-cucumber-plugin-1.0.0-SNAPSHOT.jar`.
 
 ## Running tests
 
+For a detailed explanation of how the test suites work (mock servers, snapshots, expected failures), see the [testing guide](docs/testing.md).
+
 ### Execute all tests
 
 ```bash
