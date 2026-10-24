@@ -1,5 +1,7 @@
-
 {{>partial_header}}
+{{^useGenericHost}}
+#error The csharp-cucumber generator only supports the generichost library. Regenerate without overriding the library property.
+{{/useGenericHost}}
 using System;
 using System.IO;
 using System.Collections;
@@ -7,12 +9,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
-{{#useRestSharp}}
-using RestSharp;
-{{/useRestSharp}}
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Reqnroll;
 using Shouldly;
 using Newtonsoft.Json;
@@ -24,6 +27,7 @@ using Json.Path;
 using {{packageName}}.Model;
 using {{packageName}}.Client;
 using {{packageName}}.{{apiPackage}};
+using {{packageName}}.Extensions;
 {{#hasImport}}
 using {{packageName}}.{{modelPackage}};
 {{/hasImport}}
@@ -42,7 +46,7 @@ namespace {{packageName}}.Test
     {
         private Request request;
         private IApiResponse response;
-        private Configuration configuration;
+        private IServiceProvider serviceProvider;
         private IApiResponse previousResponse;
 
         public StepDefinitions()
@@ -60,40 +64,66 @@ namespace {{packageName}}.Test
                 throw new InvalidOperationException("Missing required configuration: 'cucumber_target_host'. Please set the cucumber_target_host environment variable, or pass it at generation time with -p cucumberTargetHost=http://your-api");
             }
 
-            configuration = new Configuration
-            {
-                BasePath = targetHost
-            };
-
+            {{^hasHttpBearerMethods}}
             if (!string.IsNullOrWhiteSpace(accessToken))
             {
-                {{#hasHttpBearerMethods}}
-                configuration.AccessToken = accessToken;
-                {{/hasHttpBearerMethods}}
-                {{^hasHttpBearerMethods}}
                 throw new InvalidOperationException("An access token has been set but the OpenAPI specification has no HTTP bearer authentication methods");
-                {{/hasHttpBearerMethods}}
             }
 
+            {{/hasHttpBearerMethods}}
+            {{^hasApiKeyMethods}}
             if (!string.IsNullOrWhiteSpace(apiKey))
             {
-                {{#hasApiKeyMethods}}
-                if (string.IsNullOrWhiteSpace(securityScheme))
-                {
-                    throw new InvalidOperationException("Missing required configuration: 'cucumber_security_scheme'. When using an API key, please also set the cucumber_security_scheme environment variable");
-                }
-
-                configuration.ApiKey.Add(securityScheme, apiKey);
-            
-                if (!string.IsNullOrWhiteSpace(apiKeyPrefix))
-                {
-                    configuration.ApiKeyPrefix.Add(securityScheme, apiKeyPrefix);
-                }
-                {{/hasApiKeyMethods}}
-                {{^hasApiKeyMethods}}
                 throw new InvalidOperationException("An API key has been set but the OpenAPI specification has no API key authentication methods");
-                {{/hasApiKeyMethods}}
             }
+
+            {{/hasApiKeyMethods}}
+            {{#hasApiKeyMethods}}
+            if (!string.IsNullOrWhiteSpace(apiKey) && string.IsNullOrWhiteSpace(securityScheme))
+            {
+                throw new InvalidOperationException("Missing required configuration: 'cucumber_security_scheme'. When using an API key, please also set the cucumber_security_scheme environment variable");
+            }
+
+            {{/hasApiKeyMethods}}
+            var apiKeyPrefixWithSpace = string.IsNullOrWhiteSpace(apiKeyPrefix) ? string.Empty : apiKeyPrefix + " ";
+
+            var services = new ServiceCollection();
+            services.AddLogging();
+            services.AddApi(config =>
+            {
+                config.AddApiHttpClients(
+                    client => client.BaseAddress = new Uri(targetHost),
+                    builder => builder.AddHttpMessageHandler(() => new QuotedMultipartFilenameHandler()));
+                {{#hasHttpBearerMethods}}
+
+                config.AddTokens(new BearerToken(accessToken ?? string.Empty));
+                {{/hasHttpBearerMethods}}
+                {{#hasApiKeyMethods}}
+
+                bool apiKeySchemeFound = false;
+
+                {{#authMethods}}
+                {{#isApiKey}}
+                if (string.Equals(securityScheme, "{{name}}", StringComparison.OrdinalIgnoreCase) || string.Equals(securityScheme, "{{keyParamName}}", StringComparison.OrdinalIgnoreCase))
+                {
+                    config.AddTokens(new ApiKeyToken(apiKey ?? string.Empty, ClientUtils.ApiKeyHeader.{{#lambda.titlecase}}{{#lambda.alphabet_or_underscore}}{{keyParamName}}{{/lambda.alphabet_or_underscore}}{{/lambda.titlecase}}, apiKeyPrefixWithSpace));
+                    apiKeySchemeFound = true;
+                }
+                else
+                {
+                    config.AddTokens(new ApiKeyToken(string.Empty, ClientUtils.ApiKeyHeader.{{#lambda.titlecase}}{{#lambda.alphabet_or_underscore}}{{keyParamName}}{{/lambda.alphabet_or_underscore}}{{/lambda.titlecase}}, string.Empty));
+                }
+                {{/isApiKey}}
+                {{/authMethods}}
+
+                if (!string.IsNullOrWhiteSpace(apiKey) && !apiKeySchemeFound)
+                {
+                    throw new InvalidOperationException($"Unknown security scheme '{securityScheme}'. Expected one of the apiKey security schemes declared in the OpenAPI specification.");
+                }
+                {{/hasApiKeyMethods}}
+            });
+
+            serviceProvider = services.BuildServiceProvider();
         }
 
         [Given("there is a {string} request for the {string}")]
@@ -240,7 +270,7 @@ namespace {{packageName}}.Test
                     if (parameter == "{{baseName}}")
                     {
                         {{#isFile}}
-                        request.Parameters.Set("{{baseName}}", new MemoryStream(await File.ReadAllBytesAsync(file)));
+                        request.Parameters.Set("{{baseName}}", new FileParameter(new MemoryStream(await File.ReadAllBytesAsync(file)), Path.GetFileName(file)));
                         return;
                         {{/isFile}}
                         {{^isFile}}
@@ -271,7 +301,9 @@ namespace {{packageName}}.Test
                 throw new InvalidOperationException("No previous response exists.");
             }
 
-            if (!previousResponse.Headers.TryGetValue("Content-Type", out var contentTypeValues) || !contentTypeValues.Any(ct => ct.Contains("application/json")))
+            var mediaType = previousResponse.ContentHeaders.ContentType?.MediaType;
+
+            if (mediaType == null || !mediaType.Contains("application/json", StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException("Previous response is not JSON.");
             }
@@ -295,13 +327,13 @@ namespace {{packageName}}.Test
             {{#apiInfo.apis}}
             if (request.Classname == "{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}")
             {
-                {{classname}} api = new {{classname}}(configuration);
+                I{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}} api = serviceProvider.GetRequiredService<I{{#lambda.pascalcase}}{{classname}}{{/lambda.pascalcase}}>();
 
                 {{#operations}}
                 {{#operation}}
                 if (request.OperationId == "{{#lambda.camelcase}}{{operationId}}{{/lambda.camelcase}}")
                 {
-                    response = await api.{{operationId}}WithHttpInfoAsync({{#allParams}}request.Parameters.GetOrDefault<{{{dataType}}}>("{{baseName}}"){{^-last}}, {{/-last}}{{/allParams}});
+                    response = await api.{{operationId}}Async({{#allParams}}{{#isFile}}{{#required}}request.Parameters.GetOrDefault<FileParameter>("{{baseName}}"){{/required}}{{^required}}request.Parameters.GetOptionOrDefault<FileParameter>("{{baseName}}"){{/required}}{{/isFile}}{{^isFile}}{{#required}}request.Parameters.GetOrDefault<{{{dataType}}}>("{{baseName}}"){{/required}}{{^required}}request.Parameters.GetOptionOrDefault<{{{dataType}}}>("{{baseName}}"){{/required}}{{/isFile}}{{^-last}}, {{/-last}}{{/allParams}});
                     previousResponse = response;
                 }
                 {{^-last}}
@@ -358,13 +390,9 @@ namespace {{packageName}}.Test
         [Then("the response content should be:")]
         public void ThenTheResponseContentShouldBe(string content)
         {
-            MediaTypeHeaderValue? mediaType = null;
-            if(response.Headers.TryGetValue("Content-Type", out var contentTypeValues) && contentTypeValues.Count > 0)
-            {
-                mediaType = MediaTypeHeaderValue.Parse(contentTypeValues.First().ToLowerInvariant());
-            }
+            var mediaType = response.ContentHeaders.ContentType?.MediaType;
 
-            if (mediaType is { MediaType: "application/json" })
+            if (string.Equals(mediaType, "application/json", StringComparison.OrdinalIgnoreCase))
             {
                 var actual = JsonConvert.DeserializeObject<JToken>(response.RawContent);
                 var expected = JsonConvert.DeserializeObject<JToken>(content);
@@ -373,7 +401,7 @@ namespace {{packageName}}.Test
             }
             else
             {
-                throw new InvalidOperationException($"Cannot assert against unsupported media type: {mediaType?.MediaType}");
+                throw new InvalidOperationException($"Cannot assert against unsupported media type: {mediaType}");
             }
         }
 
@@ -386,13 +414,9 @@ namespace {{packageName}}.Test
         [Then("the response content should contain the subtree:")]
         public void ThenTheResponseShouldContainTheJsonSubtree(string content)
         {
-            MediaTypeHeaderValue? mediaType = null;
-            if(response.Headers.TryGetValue("Content-Type", out var contentTypeValues) && contentTypeValues.Count > 0)
-            {
-                mediaType = MediaTypeHeaderValue.Parse(contentTypeValues.First().ToLowerInvariant());
-            }
+            var mediaType = response.ContentHeaders.ContentType?.MediaType;
 
-            if (mediaType is { MediaType: "application/json" })
+            if (string.Equals(mediaType, "application/json", StringComparison.OrdinalIgnoreCase))
             {
                 var actual = JsonConvert.DeserializeObject<JToken>(response.RawContent);
                 var expected = JsonConvert.DeserializeObject<JToken>(content);
@@ -401,7 +425,34 @@ namespace {{packageName}}.Test
             }
             else
             {
-                throw new InvalidOperationException($"Cannot assert against unsupported media type: {mediaType?.MediaType}");
+                throw new InvalidOperationException($"Cannot assert against unsupported media type: {mediaType}");
+            }
+        }
+
+        /// <summary>
+        /// Quotes multipart file names in Content-Disposition headers. Some mock servers
+        /// (e.g. Stoplight Prism) cannot parse unquoted file names.
+        /// </summary>
+        private class QuotedMultipartFilenameHandler : DelegatingHandler
+        {
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                if (request.Content is MultipartFormDataContent multipartContent)
+                {
+                    foreach (var content in multipartContent)
+                    {
+                        var disposition = content.Headers.ContentDisposition;
+
+                        if (disposition?.FileName is string filename)
+                        {
+                            disposition.FileName = null;
+                            disposition.FileNameStar = null;
+                            disposition.Parameters.Add(new NameValueHeaderValue("filename", $"\"{filename.Replace("\\", "\\\\").Replace("\"", "\\\"")}\""));
+                        }
+                    }
+                }
+
+                return base.SendAsync(request, cancellationToken);
             }
         }
 
@@ -417,6 +468,11 @@ namespace {{packageName}}.Test
             public T GetOrDefault<T>(string name)
             {
                 return values.TryGetValue(name, out object value) ? (T)value : default;
+            }
+
+            public Option<T> GetOptionOrDefault<T>(string name)
+            {
+                return values.TryGetValue(name, out object value) ? new Option<T>((T)value) : default;
             }
         }
 

@@ -13,7 +13,12 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="{{^netStandard}}2.8.2{{/netStandard}}{{#netStandard}}2.4.5{{/netStandard}}" />
     <PackageReference Include="Reqnroll.xUnit" Version="{{^netStandard}}3.3.4{{/netStandard}}{{#netStandard}}3.3.4{{/netStandard}}" />
     <PackageReference Include="Shouldly" Version="{{^netStandard}}4.3.0{{/netStandard}}{{#netStandard}}4.3.0{{/netStandard}}" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="{{^netStandard}}9.0.6{{/netStandard}}{{#netStandard}}9.0.6{{/netStandard}}" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="{{^netStandard}}10.0.1{{/netStandard}}{{#netStandard}}9.0.6{{/netStandard}}" />
+    {{#useGenericHost}}
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="{{^netStandard}}10.0.1{{/netStandard}}{{#netStandard}}9.0.6{{/netStandard}}" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="{{^netStandard}}10.0.1{{/netStandard}}{{#netStandard}}9.0.6{{/netStandard}}" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="{{^netStandard}}10.0.1{{/netStandard}}{{#netStandard}}9.0.6{{/netStandard}}" />
+    {{/useGenericHost}}
     <PackageReference Include="JsonPath.Net" Version="{{^netStandard}}0.6.4{{/netStandard}}{{#netStandard}}0.6.4{{/netStandard}}" />
   </ItemGroup>
 
